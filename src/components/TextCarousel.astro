@@ -1,0 +1,19 @@
+---
+const items = Array(4).fill(0);
+---
+
+<div class="w-auto md:-mx-56 xl:-mx-80 flex space-x-6 text-gray-700 text-3xl md:text-6xl overflow-hidden">
+	{
+		items.map((_, i) => (
+			<div
+				aria-hidden={i !== 0 ? "true" : "false"}
+				class="flex flex-nowrap space-x-6 *:font-body *:leading-snug animate-carousel"
+			>
+				<span>student&nbsp;&bull;</span>
+				<span>web&nbsp;dev&nbsp;&nbsp;&bull;</span>
+				<span>musician&nbsp;&nbsp;&bull;</span>
+				<span>designer&nbsp;&nbsp;&bull;</span>
+			</div>
+		))
+	}
+</div>

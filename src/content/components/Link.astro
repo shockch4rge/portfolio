@@ -1,0 +1,30 @@
+---
+interface Props {
+	href: string;
+}
+
+const { href } = Astro.props;
+---
+
+<a
+	href={href}
+	class="group inline-flex items-baseline text-white hover:text-primary font-medium relative transition-colors"
+>
+	<slot />
+	<span class="absolute inset-x-0 -bottom-0 h-[1.5px] bg-primary group-hover:opacity-0 transition-opacity">
+	</span>
+	{
+		href.startsWith("https://") && (
+			<i
+				aria-label="external link"
+				class="my-auto ph ph-arrow-up-right text-primary text-base font-semibold group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform ease-in-out"
+			/>
+		)
+	}
+</a>
+
+<style>
+	a:has(code) span {
+		@apply hidden;
+	}
+</style>

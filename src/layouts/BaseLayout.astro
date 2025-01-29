@@ -1,0 +1,111 @@
+---
+import Glow from "@assets/bg_glow.svg";
+import NavBar from "@components/NavBar.astro";
+import Footer from "@components/Footer.astro";
+import { ClientRouter, fade } from "astro:transitions";
+
+interface Props {
+	title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="generator" content={Astro.generator} />
+		<meta name="description" content="Favian's Portfolio Website, Web Developer, Musician, Student" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="stylesheet" href="tailwind.css" />
+		<title>favi. | {title}</title>
+		<script is:inline data-astro-rerun src="https://unpkg.com/@phosphor-icons/web@2.1.1"></script>
+		<script
+			is:inline
+			data-astro-rerun
+			src="https://kit.fontawesome.com/f69099e7e7.js"
+			crossorigin="anonymous"></script>
+		<ClientRouter />
+	</head>
+	<body>
+		<NavBar />
+		<main>
+			<slot transition:animate={fade({ duration: "0.4s" })} />
+		</main>
+		<Glow class="fixed -top-40 -left-24 select-none pointer-events-none z-0" />
+		<Footer />
+	</body>
+</html>
+
+<style is:global>
+	:root {
+		--cube-in: cubic-bezier(0.18, 0.89, 0.23, 1);
+	}
+
+	*,
+	::after,
+	::before {
+		@apply box-border;
+	}
+
+	body {
+		::selection {
+			@apply bg-white text-secondary;
+		}
+
+		:focus-within {
+			@apply outline-white;
+		}
+
+		scrollbar-gutter: stable;
+
+		@apply w-screen m-0 flex flex-col bg-secondary scroll-smooth;
+	}
+
+	@font-face {
+		src: url("/fonts/Satoshi-Variable.ttf") format("truetype");
+		font-weight: normal;
+		font-style: normal;
+		font-display: swap;
+	}
+
+	@font-face {
+		src: url("/fonts/JetBrainsMono[wght].ttf") format("truetype");
+		font-weight: normal;
+		font-style: normal;
+		font-display: swap;
+	}
+
+	h1,
+	h2,
+	p,
+	label {
+		@apply font-body;
+	}
+
+	h3,
+	h4,
+	h5,
+	h6,
+	button {
+		@apply font-display;
+	}
+
+	h1 {
+		@apply text-white text-4xl lg:text-5xl font-bold font-body;
+	}
+
+	h2 {
+		@apply text-white text-3xl font-bold;
+	}
+
+	h3 {
+		@apply text-primary text-xl font-semibold tracking-[0.25rem];
+	}
+
+	p {
+		@apply text-white text-lg leading-relaxed max-w-prose;
+	}
+</style>

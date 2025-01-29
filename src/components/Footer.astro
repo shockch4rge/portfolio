@@ -1,0 +1,76 @@
+---
+import { isInputError } from "astro:actions";
+import { actions } from "astro:actions";
+
+const linkIcons = [
+	{
+		className: "fa-brands fa-github",
+		name: "GitHub",
+		url: "https://github.com/shockch4rge",
+		label: "leave page to my GitHub",
+	},
+	{
+		className: "fa-brands fa-bluesky",
+		name: "Bluesky",
+		url: "https://bsky.app/profile/favteo.bsky.social",
+		label: "leave page to my Bluesky",
+	},
+	{
+		className: "fa-brands fa-linkedin",
+		name: "Linkedin",
+		url: "https://linkedin.com/favian-teo-eu-kiat",
+		label: "leave page to my Linkedin",
+	},
+];
+
+const result = Astro.getActionResult(actions.newsletter);
+const inputErrors = isInputError(result?.error) ? result.error.fields : {};
+---
+
+<footer
+	class="mt-auto py-12 px-12 md:px-24 lg:px-32 2lg:px-36 xl:px-40 grid grid-cols-5 text-white bg-secondary/40 z-30 relative"
+>
+	<!-- <div>
+		<label for="newsletter">
+			<h5 class="text-xl font-bold font-body">Sign up for my newsletter!</h5>
+		</label>
+		{result?.error && <p class="text-red-600">Unable to sign up. Please try again later.</p>}
+		{inputErrors.email && <p class="text-red-600">Invalid email.</p>}
+		<form
+			id="newsletter"
+			method="POST"
+			action={actions.newsletter}
+			class="p-1 flex gap-2 bg-slate-800/40 rounded-sm"
+		>
+			<input
+				name="email"
+				type="email"
+				placeholder="Enter your email"
+				aria-describedby="error"
+				class="py-2 px-3 flex-grow bg-gray-300/10 rounded-sm focus-within:outline-primary font-body font-sm"
+			/>
+			<button
+				class="py-1 px-3 h-full flex items-center justify-center sm:space-x-2 bg-primary hover:bg-gray-700 active:scale-95 font-display text-sm text-secondary hover:text-white transition-colors rounded-sm"
+			>
+				<span class="hidden sm:flex">SUBSCRIBE</span>
+				<i class="ph ph-arrow-right font-normal"></i>
+			</button>
+		</form>
+	</div> -->
+	<div class="mt-12 col-span-5 flex items-center space-x-6">
+		<div class="bg-gray-800 flex-grow h-0.5"></div>
+		<div class="flex space-x-4 items-center">
+			{
+				linkIcons.map(l => (
+					<a href={l.url}>
+						<i class:list={[l.className, "w-8 h-8"]}>{l.label}</i>
+					</a>
+				))
+			}
+		</div>
+		<div class="bg-gray-800 flex-grow h-0.5"></div>
+	</div>
+	<p class="group mt-12 col-span-5 text-center place-self-center">
+		Built with <i class="ph-fill ph-heart group-hover:text-pink-400 transition-colors">love</i> by favian
+	</p>
+</footer>

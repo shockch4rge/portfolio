@@ -1,0 +1,19 @@
+---
+import Container from "@components/Container.astro";
+import ProjectCard from "@components/ProjectCard.astro";
+import BaseLayout from "@layouts/BaseLayout.astro";
+import { getProjects } from "../content.config";
+
+const [p] = await getProjects();
+const projects = [p, p, p, p, p, p, p, p];
+---
+
+<BaseLayout title="Projects">
+	<Container className="items-center">
+		<h1 class="w-auto mt-4 self-start">projects.</h1>
+		<ul class="w-full mt-14 p-2 grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-10">
+			{projects.map(({ id, data }, i) => <ProjectCard index={i} project={{ id, ...data }} />)}
+		</ul>
+		<h3 class="my-28 text-white text-center text-xl md:text-2xl lg:text-3xl">...and more to come!</h3>
+	</Container>
+</BaseLayout>

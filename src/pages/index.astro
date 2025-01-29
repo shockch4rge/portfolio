@@ -1,10 +1,116 @@
 ---
-import NavBar from '../components/NavBar.astro';
-import Layout from '../layouts/Layout.astro';
+import Container from "@components/Container.astro";
+import TextCarousel from "@components/TextCarousel.astro";
+import BaseLayout from "@layouts/BaseLayout.astro";
+import Timeline from "@components/Timeline.astro";
+import { Image } from "astro:assets";
+import GowRagnarok from "@assets/gow_ragnarok.png";
+import Minecraft from "@assets/minecraft.png";
+import SgFlag from "@assets/sg_flag.png";
 
+const timelineData = [
+	{
+		date: "2016",
+		title: "Inspect Element",
+		description: "Lorem Ipsum",
+	},
+	{
+		date: "2018",
+		title: "Polytechnic",
+		description: "Lorem Ipsum",
+	},
+	{
+		date: "2020",
+		title: "National Service",
+		description: "Lorem Ipsum",
+	},
+	{
+		date: "2022",
+		title: "Future",
+		description: "Lorem Ipsum",
+	},
+];
 ---
 
-<Layout>
-	<NavBar />
-	<slot name="body" />
-</Layout>
+<BaseLayout title="Portfolio">
+	<Container center className="h-screen mt-[-5rem]">
+		<h1 class="w-full z-50 text-[2.5rem] md:text-7xl text-primary text-start font-body font-extrabold">
+			Hey. I'm&nbsp;Favian,
+		</h1>
+		<TextCarousel />
+		<div class="absolute bottom-8 -space-y-6">
+			{
+				Array(2)
+					.fill(0)
+					.map((_, i) => (
+						<i
+							class={`fa fa-chevron-down block text-slate-700 text-4xl animate-bounce delay-[${200 * i}]`}
+						/>
+					))
+			}
+		</div>
+	</Container>
+	<section class="grid mx-72 grid-cols-4 items-center gap-4">
+		<h1 class="my-8 col-span-full">About Me</h1>
+		<p
+			class="col-span-2 p-4 rounded-md bg-gray-950/40 ring-2 ring-gray-600 ring-offset-4 ring-offset-gray-800"
+		>
+			<span class="font-bold italic">Inspect Element.</span> As a secondary school student bored in the computer
+			lab, I was fidgeting around a website and came across an option named 'Inspect Element'. Curious, I
+			clicked it. I was immediately shown the intricate inner workings of the website and my mind was blown,
+			completely fascinated by the power and customisibility I possessed. Since then, I've never looked back.
+		</p>
+
+		<Image src={SgFlag} alt="Singapore flag" class="col-span-2 aspect-[3/2]" />
+
+		<p class="col-span-2">
+			In my free time, I play various musical instruments, from guitars to pianos and even saxophone (to
+			an extent). Recently, I've been jamming with a friend and we plan to start a small band for gigs at
+			open mic nights.
+		</p>
+
+		<p>
+			If I <em>really</em> do have a lot of free time, I like to spend it playing games. I'm thankful for
+			growing up the great games like Minecraft. Not old enough to be raised alongside Doom 64 though!
+		</p>
+
+		<p>
+			I created this portfolio as a way to showcase the journey I've taken so far in my career. The
+			Projects page contains some of my proudest work I've done up to now, with each post detailing an
+			overview of the project, overcoming simple-to-difficult roadblocks, and maybe even some cool facts
+			about the development process. I delve deep into the challenges I face to understand why they exist
+			on an atomic level, rather than slapping a band-aid solution from StackOverflow and calling it a
+			day.
+		</p>
+	</section>
+</BaseLayout>
+
+<script>
+	// fade in elements that come into screen
+	const elements = document.querySelectorAll(".fade-in");
+	const options = {
+		rootMargin: "0px",
+		threshold: 0.5,
+	};
+
+	const observer = new IntersectionObserver((entries, observer) => {
+		entries.forEach(entry => {
+			if (!entry.isIntersecting) {
+				return;
+			} else {
+				entry.target.classList.add("animate-fade-in");
+				observer.unobserve(entry.target);
+			}
+		});
+	}, options);
+
+	elements.forEach(element => {
+		observer.observe(element);
+	});
+</script>
+
+<style>
+	.fade-in {
+		opacity: 0;
+	}
+</style>

@@ -1,0 +1,88 @@
+---
+import type { DirectoryProps } from "./Filetree.astro";
+
+interface Props extends DirectoryProps {}
+
+const { name, files, open = false } = Astro.props;
+---
+
+<details class:list={[`dir-${name} group/${name}`]} open={open} onclick={!files ? "return false" : undefined}>
+	<summary
+		class={`group py-1.5 px-2 flex items-center text-gray-500 hover:text-gray-300 hover:bg-slate-800 rounded-sm relative transition-colors`}
+	>
+		{
+			files?.map((_, i) => (
+				<svg
+					id="tree-connector"
+					class="hidden absolute h-full left-[-1px] font-bold select-none pointer-events-none group-last/${name}:bg-white"
+					style={{ bottom: `-${(i + 1) * 2}rem` }}
+					viewBox="0 0 30 30"
+					xmlns="http://www.w3.org/2000/svg"
+				>
+					{i === files.length - 1 ? (
+						<>
+							<polyline
+								class="fill-none stroke-slate-800 stroke-[1.5px]"
+								stroke-linejoin="round"
+								points="15,0 15,15 25,15"
+							/>
+						</>
+					) : (
+						<>
+							<line
+								class="fill-none stroke-slate-800 stroke-[1.5px]"
+								x1="15"
+								x2="15"
+								y1="0"
+								y2="30"
+								stroke-linejoin="round"
+							/>
+							<line
+								class="fill-none stroke-slate-800 stroke-[1.5px]"
+								x1="15"
+								x2="28"
+								y1="15"
+								y2="15"
+								stroke-linejoin="round"
+							/>
+						</>
+					)}
+				</svg>
+			))
+		}
+		<!-- TODO: temp until tw v4 not-* variants are supported in astro -->
+		<i class:list={["text-sm text-center mr-3", files ? `fa-solid fa-folder` : "fa-regular fa-file"]}></i>
+		<span class:list={[`text-sm font-display relative`, files && `before:content-['\\/'] before:-mr-1`]}>
+			{name}
+		</span>
+	</summary>
+	{files && files.map(f => <Astro.self name={f.name} files={f.files} open={f.open && open} />)}
+</details>
+
+<style>
+	details {
+		@apply select-none;
+
+		& > details {
+			@apply ml-7;
+		}
+
+		&[open] {
+			@apply mb-2;
+
+			& > summary > #tree-connector {
+				@apply block;
+			}
+		}
+	}
+
+	summary {
+		&::-webkit-details-marker {
+			@apply hidden;
+		}
+
+		&::marker {
+			@apply list-none;
+		}
+	}
+</style>

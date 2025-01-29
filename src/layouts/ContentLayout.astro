@@ -1,0 +1,136 @@
+---
+import type { MarkdownHeading } from "astro";
+
+import BaseLayout from "./BaseLayout.astro";
+import { Toc } from "@content/components/toc/Toc";
+import type { Tag } from "src/content.config";
+import type { InferEntrySchema } from "astro:content";
+
+interface Props {
+	title: string;
+	headings: MarkdownHeading[];
+	tags: InferEntrySchema<"projects" | "blog">["tags"];
+}
+
+const { title, headings } = Astro.props;
+---
+
+<BaseLayout title={title}>
+	<article
+		class:list={[
+			"*:min-w-0 *:col-start-1 *:md:col-start-2 *:col-span-1 *:font-body",
+			"px-8 sm:px-12 pt-12 sm:pt-16 pb-16 min-h-screen grid grid-cols-1 justify-center",
+			"sm:px-20",
+			"md:px-0 md:grid-cols-[1fr_60ch_1fr]",
+			"lg:grid-cols-[1fr_52ch_20rem_1fr]",
+			"2lg:grid-cols-[1fr_62ch_20rem_1fr]",
+			"xl:grid-cols-[1fr_68ch_24rem_1fr]",
+		]}
+	>
+		<slot />
+		<Toc client:load headings={headings} />
+	</article>
+	<slot name="related-projects" />
+	<slot name="related-blogs" />
+</BaseLayout>
+
+<style is:global>
+	p {
+		@apply mb-6 text-pretty tracking-[0.01rem];
+	}
+
+	h1 {
+		@apply text-5xl mb-14;
+	}
+
+	h2,
+	h3 {
+		@apply text-primary scroll-mt-28;
+	}
+
+	h2 {
+		@apply mt-14 mb-8 text-3xl;
+	}
+
+	h3 {
+		@apply mt-10 mb-8 text-xl text-pretty font-bold tracking-[0.2rem] font-display uppercase;
+	}
+
+	ol {
+		@apply mb-12 text-white space-y-4 text-base;
+	}
+
+	.expressive-code {
+		@apply -mx-8 mt-8 mb-12 ring-2 ring-slate-800 ring-offset-2 ring-offset-slate-900 sm:rounded-md;
+
+		#alert & {
+			@apply -mx-4;
+		}
+
+		pre {
+			@apply !rounded-none;
+		}
+
+		:not(.has-title) {
+			pre {
+				@apply sm:!rounded-md;
+			}
+		}
+
+		.has-title {
+			pre {
+				@apply sm:!rounded-b-md;
+			}
+
+			.header {
+				/* bg is a linear gradient for some reason */
+				background: none !important;
+				@apply !bg-gray-950 !rounded-none sm:!rounded-t-md;
+			}
+
+			.title {
+				&::after {
+					@apply !border-none;
+				}
+			}
+		}
+	}
+
+	code:not(.expressive-code code) {
+		@apply px-1 py-1.5 rounded-sm text-sm bg-gray-800/80 whitespace-nowrap;
+	}
+
+	figcaption code {
+		@apply text-xs;
+	}
+</style>
+
+<script>
+	import { object } from "astro:schema";
+
+	let observer: IntersectionObserver;
+	const headings = document.querySelectorAll("article>:is(h2,h3)");
+
+	const observe = () => {
+		if (observer) observer.disconnect();
+
+		observer = new IntersectionObserver(headings => {
+			if (observer)
+				for (const heading of headings) {
+					const id = heading.target.id;
+					const link = document.querySelector(`article #toc li a[href="#${id}"]`);
+
+					if (!link) return;
+
+					const addRemove = heading.intersectionRatio > 0 ? "add" : "remove";
+					link.classList[addRemove]("text-indigo-400");
+				}
+		});
+
+		for (const heading of headings) {
+			observer.observe(heading);
+		}
+	};
+
+	observe();
+</script>

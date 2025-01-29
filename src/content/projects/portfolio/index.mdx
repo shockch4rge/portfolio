@@ -1,0 +1,325 @@
+---
+name: "Portfolio"
+description: "This website you're viewing right now :)"
+pubDate: "2025-06-01"
+draft: false
+tags:
+    - "typescript"
+    - "astro"
+    - "tailwindcss"
+    - "cloudflare"
+---
+
+import Media from "@content/components/Media.astro";
+import Link from "@content/components/Link.astro";
+import Alert from "@content/components/Alert.astro";
+import Filetree from "@content/components/filetree/Filetree.astro";
+import OldSite1 from "./assets/old_site_1.png";
+import GridExample from "./components/grid-example/index.astro";
+import PaddingExample from "./components/padding-example/index.astro";
+
+Finally, a portfolio website after 5 years of programming! Honestly, I'm quite surprised that it took me this
+long to complete one. This website is the successor to a few previous, unfinished versions.
+
+## The Predecessors
+
+A few years ago, I initially sprung for a React app, as I was recently got comfortable with using it. But that version was pretty
+badly implemented and I didn't think about how a blog would work or was populated on a Vite SPA (Single Page App).
+
+_Overall, not the best-planned project..._
+
+For my second attempt, I used Astro for the first time. 3.0 had recently released and I had heard a lot of excitement about the
+new hot thing; server islands. I used Tailwind with it. Here's what it looked like:
+
+<Media src={OldSite1} alt="Old site" />
+
+It was certainly an improvement, but there were a number of problems. The code itself was _super_ buggy because I had zero clue of what
+I was doing in Astro. I couldn't get many things to work and
+managing <Link href="https://github.com/tailwindlabs/tailwindcss-typography">Tailwind's typography</Link> styles was a complete
+mess. Additionally, my dislike of the website's aesthetic led me to eventually neglect it.
+
+-
+
+## An Upgrade
+
+There was a major design overhaul, coupled with the fact that I actually built a prototype in Figma instead of winging it.
+This site was built with the following tools:
+
+1. TailwindCSS
+2. Astro
+3. Cloudflare
+4. React
+
+## Overcoming problems
+
+### Tailwind's typography plugin
+
+Tailwind offers a plugin called <Link href="https://github.com">`@tailwindcss/typography`</Link> specifically for styling rendered
+markdown content. It offers fast and sensible defaults to your project through the use of just 1 class - `prose`.
+This seemed like a perfect addition to my project as I didn't want to style every single element on my own.
+
+Unfortunately, Tailwind really shows its ugly side here. Here's a snippet from when I initially used the plugin in this project:
+
+```astro title='ContentLayout.astro'
+class:list={[
+    // other classes left for brevity
+    "prose",
+    "prose-h1:text-white prose-h1:text-5xl",
+    "prose-h2:text-primary prose-h2:text-4xl",
+    "prose-h3:text-primary prose-h3:text-xl prose-h3:font-bold prose-h3:tracking-widest prose-h3:mt-12",
+    "prose-li:text-white prose-li:text-lg prose-li:font-body",
+    "prose-strong:text-white prose-em:text-white",
+    "prose-code:text-white prose-code:font-display prose-code:before:content-[''] prose-code:after:content-['']",
+    "prose-figcaption:place-self-center prose-figcaption:font-body",
+    "prose-headings:scroll-mt-32 prose-headings:relative",
+    "prose-code:[&:not(pre_code)]:bg-white"
+    // ...
+]}
+```
+
+That's not even all the styling I wanted to apply. Honestly, I didn't expect the level of rigidity here.
+Trying to customise a value just introduced a lot of characters, which were finicky to control through Tailwind anyway.
+If I wanted to remove the default backticks on `code` elements that were part of the plugin,
+
+For example, targetting `prose-code` also selected `code` elements inside code blocks, so that was a little annoying. I had to dig into
+Tailwind's arbitrary value formatting and came up with this monstrosity:
+
+```html
+"prose-pre:[code:not()]"
+```
+
+I ended up writing CSS code for my markdown. Honestly, if you're fine with Tailwind's default styling, it's a great library - and it seems
+to be made for that purpose. However, if you want to customise more than a couple stylings, I wouldn't recommend it.
+
+### Content Collections
+
+This site is built with Astro `v5.1.2`. A lot of changes from Astro 3, but most of them didn't affect
+my work. One core feature that stayed around that was necessary to populate my website were _content collections_.
+Content collections are essentially just a set of data, like JSON files or entire blog posts. These are stored locally on the project.
+They're great and all, but I did come to a roadblock with them at one point.
+
+Normally, how you'd define a collection goes as follows:
+
+```ts title="content.config.ts"
+const projects = defineCollection({
+	loader: glob({
+		pattern: "**/*.{md,mdx}",
+		base: "./src/content/projects",
+	}),
+	schema: z.object({
+		name: z.string(),
+		description: z.string(),
+		pubDate: z.coerce.date(),
+		githubUrl: z.string().optional(),
+		url: z.string().optional(),
+		draft: z.boolean().optional().default(false),
+		tags: z.array(reference("tags")).optional(),
+		related: z.array(reference("projects")).optional(),
+	}),
+});
+```
+
+`defineCollection` needs 2 props - `loader` & `schema`. `loader` specifies how Astro parses your media, with `glob` being
+file path matching, and `file`, which loads JSON files via an exact path.
+
+`schema` is how you format your markdown. I use MDX (an extension of Markdown), as Astro has first-class support for it, alongside an
+included frontmatter plugin. Astro also exposes a <Link href="https://zod.dev">Zod</Link> object for you to streamline the creation of
+your frontmatter schema and provide generated Typescript types in the project. Pretty neat!
+
+<Alert type="info" title="Heads up!">
+	<Link href="https://docs.astro.build/en/guides/content-collections/#zod-schema-methods">
+		Astro only supports most of Zod's methods.
+	</Link>
+</Alert>
+
+For instance, the frontmatter for this project looks like this:
+
+```yaml
+---
+name: "Portfolio"
+description: "This website you're viewing right now :)"
+pubDate: "2025-06-01"
+draft: false
+tags:
+    - "typescript"
+    - "astro"
+    - "tailwindcss"
+    - "cloudflare"
+---
+```
+
+Astro verifies the structure of the frontmatter props on every page load. For example, if `name` was omitted, Astro would complain and
+throw an error, and stop rendering the markdown file.
+
+As you've seen above, there are a quite a number of data types that are available for use in the schema. However, there is a special
+type created by Astro that's not natively in Zod - `reference`. It essentially allows you to refer to an entry in another collection via
+its slug.
+
+For instance, the `projects` collection references the `tags` and `projects` collections:
+
+```ts title="content.config.ts" {13-14} collapse={2-5} collapseStyle="collapsible-start"
+const projects = defineCollection({
+	loader: glob({
+		pattern: "**/*.{md,mdx}",
+		base: "./src/content/projects",
+	}),
+	schema: z.object({
+		name: z.string(),
+		description: z.string(),
+		pubDate: z.coerce.date(),
+		githubUrl: z.string().optional(),
+		url: z.string().optional(),
+		draft: z.boolean().optional().default(false),
+		tags: z.array(reference("tags")).optional(),
+		related: z.array(reference("projects")).optional(),
+	}),
+});
+```
+
+This all seems fine. But a peculiar issue came up when I added those 2 types and ran the project again:
+
+```
+Cannot destructure property 'type' of 'lookupMap[collection]' as it is undefined
+```
+
+That's odd. I was sure that I typed it correctly, as per
+the <Link href="https://docs.astro.build/en/guides/content-collections/#defining-collection-references">docs</Link>. So why wasn't it
+working?
+
+Turns out, it was a bug on Astro's side. <Link href="https://github.com/withastro/astro/issues/12885">The GitHub issue</Link> itself has since been fixed and closed,
+but essentially, a race condition would occur where Astro would try to assign the record to a collection
+without the collection actually existing in the first place. This mismatch causes the project to stop building and fail. It was
+frustrating at first, since I had triple-checked my code.
+
+I did discover a workaround involving the `.astro` folder. This is what it looks like, with other files omitted for brevity:
+
+<Filetree
+	files={[
+		{
+			name: "collections",
+			files: [
+				{ name: "blog.schema.json" },
+				{ name: "projects.schema.json" },
+				{ name: "tags.schema.json" },
+			],
+		},
+		{ name: "actions.d.ts" },
+		{ name: "content.d.ts" },
+		{ name: "types.d.ts" },
+	]}
+/>
+
+The `collections` folder is where Astro stores the parsed content schemas. I suspected the problem was the definitions themselves,
+so I deleted the folder and regenerated it, which actually fixed the problem. This issue was quickly fixed after opening an issue on
+the GitHub.
+
+## Creating the layout
+
+If you inspect this page with dev tools, you'll see that I use CSS grid. Initially, I used flexbox to create the layout for the page, but
+it just _didn't seem right_. I was stuck with so much random padding in many places! Using
+
+I've prepared a rough demo below. **_If you're on mobile, you may have to switch to a bigger device to see the full layout._**
+Adjust the slider to change the width of the viewport:
+
+<GridExample />
+
+So, how was this accomplished?
+
+On mobile devices, there is only 1 column in the diagram, holding only the article content. But as we increase the viewport size,
+we gradually add more columns to the container. ToCs (Table-of-Contents) are not space-efficient on smaller screens, so we remove that functionality entirely.
+Once we pass the `xs` threshold, we add back the ToC column!
+
+When we have a big enough viewport, we don't want the content to reach the ends of the screen. This can make reading feel clunky
+and difficult to digest, as the content is spread over a large area. To prevent this, we have to introduce some sort of padding on the
+horizontal axis of the page. We have two solutions: either use `padding`, or grid columns. We'll pick the latter option,
+for reasons I'll explain soon.
+
+To add padding, we insert divs at both ends that are `1fr` in width at the `sm` threshold, while the middle two have their own fixed width.
+`1fr` is a grid-exclusive unit that simply means; **_"fill up the remaining space, but shrink based on the size of the viewport"._**
+
+We can achieve all these through the use of `grid-template-columns`:
+
+```css title="index.css"
+#container {
+	display: grid;
+	grid-template-columns: 1fr 24rem 12rem 1fr;
+}
+```
+
+```astro title="index.astro"
+<div
+	id="container"
+	class:list={[
+		"grid-cols-1",
+		"@xs:grid-cols-[3fr_1fr]",
+		"@md:grid-cols-[1fr_16rem_8rem_1fr]",
+		"@[39]:grid-cols-[1fr_24rem_12rem_1fr]",
+		"justify-center relative gap-2"
+	]}
+>
+</div>
+```
+
+<Alert type="info" title="What does that '@' character do?">
+	Tailwind has a package called
+	<Link href="https://tailwindlabs.com">`@tailwindcss/container-queries`</Link> that allows you to use Tailwind's
+	utilities with the <Link href="https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_containment/Container_queries">
+		CSS Container Query API
+	</Link>. Container queries are extremely useful, and the rundown is that they allow you to style children of
+	a container based on its width! Think of media queries, but for individual elements. Take a read 
+	at <Link href="https://www.joshwcomeau.com/css/container-queries-introduction">Josh Comeau's
+	blog post here</Link>, where he does an amazing job introducing container queries.
+
+    ```ts title="index.ts"
+    console.log("hello world!")
+    ```
+
+</Alert>
+
+So why exactly did we choose these boxes over using the reliable `padding` property? It's kind of a personal preference.
+Let's consider how our layout stretches/shrinks with `padding` implemented:
+
+<PaddingExample />
+
+As you can see, it's quite similar. Our content still conforms to the viewport as we originally want. But obviously the glaring difference
+is the `padding`'s lack of care for the viewport, stretching past it. While this doesn't really matter much as these empty divs don't
+contain anything, I still find it a little unrefined in its implementation, hence I prefer using `fr`.
+
+## Interactive sections
+
+You may be wondering how components like the filetree and grid layout example exist. After all, aren't I just using markdown to write
+these pages? Well, thanks to the combined power of **Astro**, **React**, & **MDX**, this is possible and it's so cool to be able to create these
+mini interactable sections while still writing plain text.
+
+### Islands
+
+Astro introduces the concept of '**_islands_**', which is a relatively new architecture in
+the web dev space. <Link href="https://docs.astro.build/en/concepts/islands/#a-brief-history">Astro's docs explain it best</Link>. To understand it, we first need to elaborate on the concept of **hydration**.
+
+To put it briefly, hydration means adding JavaScript interactivity to a static page. We defer this process until after the HTML/CSS has finished loading, as JS
+is one of the slowest forms of data to send to the client. This gives the page a 'complete' appearance,
+though in actuality lacks any functionality.
+
+There are different ways to hydrate a web page -
+for example, in SPAs (Single-Page-Apps), hydration is often done all at once, often making page loads speed slow. SPAs are usually
+reserved for web apps that contain a large amount of JS functionality, like dashboards and e-commerce sites.
+
+Astro hydrates pages via islands. These islands also perform hydration, but rather on a component-level basis. This basically means that
+most of the web page remains statically loaded, while only the components that you specify will require JavaScript hydration, keeping
+load times low and the page fast.
+
+There are two types of islands; client and server. For brevity, I'll only cover client islands in this post.
+
+To create a client island, we use the `client:*` directive on a component as follows:
+
+```astro
+<HelloWorld client:load />
+```
+
+There are a few `client*` directives available:
+
+1. `client:load`: Load the component only when the page has finished loading other static assets
+2. `client:idle`: Load the component when the browser becomes idle
+3. `client:visible`: Load the component when it enters the viewport
+
+This tells Astro

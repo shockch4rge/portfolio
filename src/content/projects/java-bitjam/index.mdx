@@ -1,0 +1,166 @@
+---
+name: "BitJam (Android)"
+description: "An offline music player for Android."
+pubDate: "2024-10-01"
+draft: true
+tags:
+    - "android"
+    - "java"
+related:
+    - discord-bitjam
+---
+
+import Tags from "@components/Tags.astro";
+import Alert from "@components/Alert.astro";
+import { Image } from "astro:assets";
+import banner from "@assets/test_banner.png";
+
+# {frontmatter.name}
+
+<Tags data={frontmatter.tags} />
+
+## Introduction
+
+BitJam was a music player app for Android that I developed for a school project in 2021, built with pure Java. This was my first ever
+experience with mobile development - and honestly programming in general. This is quite a long post as I spent my novice time here.
+
+In the following months, I decided to revisit the concept and branched it out to a Discord bot, which utilised discord.js' API. Check out
+the related post above for it.
+
+## Features
+
+1. Play songs offline, with seeking, shuffling, and repeat available
+2. Like/favourite songs, add them to playlists
+3. Search for existing songs in library via fuzzy(?) searching
+4. Pretty complex animations from a programming newbie (hehe)
+5. Google auth and login w/Firebase
+6. Firestore database
+7. Fragments/ViewModel architecture
+
+### PLAYING MUSIC
+
+The app contained the standard controls for a music player. This included a display of the current song, ability to seek to any section,
+pause/play functions, skip to the next track - or go back to the previous one. There were loop and shuffle toggleables as well. Some extra
+features were the ability to add songs to a playlist.
+
+I'd been wondering about how a music player worked for a while now, so it was exciting to finally be able to get my hands dirty and
+actually make one from scratch.
+
+## The Process
+
+### JAVA IS ACTUALLY...NOT BAD?
+
+As a beginner, I actually _loved_ Java. I thought its strictly-typed system and _'everything is a class'_ approach made so much sense,
+and I genuinely think it's a great language for newbies to start programming with; even preferable over JavaScript,
+which I think teaches you some of the worst habits ever. It also made it easier to step towards TypeScript -
+though it wasn't as smooth as I'd liked, as I had to differentiate between nominal and structural typing.
+
+But still there were so many, many caveats to Java. _So many headaches_.
+
+_'Everything is a class'_ meant that simple stuff like anonymous inner classes required creating a class, access modifiers, and methods -
+they all had to be typed out, and it took really long. No wonder the common sentiment amongst programmers was Java being insanely verbose.
+
+I mean, don't even get me started on how to assert non-null objects in Android:
+
+```java title="PureLiveData.java" "NotNull" "NonNull" "requireNonNull"
+
+@NonNull
+@NotNull
+@Override
+public T getValue() {
+    return Objects.requireNonNull(super.getValue());
+}
+```
+
+<figcaption>A `LiveData` superclass that asserted non-null values. Had to declare it 3 times.</figcaption>
+
+<Alert type="info" title="Why does this exist?">
+	`PureLiveData` was simply a class that extended Android's `LiveData`. As seen in the above figure, there
+	were a lot of areas where one would need to constantly redefine non-null values. This idea came from a
+	fellow classmate, Zechariah.
+</Alert>
+
+Initialising anonymous inner classes took up a ton of space, even when you didn't need to all use its methods.
+Here's an example with Android's animation listeners:
+
+```java {4, 15}
+slide_up.setAnimationListener(new Animation.AnimationListener() {
+    @Override
+    public void onAnimationStart(Animation animation) {
+        // empty
+    }
+
+    @Override
+    public void onAnimationEnd(Animation animation) {
+        startActivity(new Intent(SplashActivity.this, SignInActivity.class));
+        finish();
+    }
+
+    @Override
+    public void onAnimationRepeat(Animation animation) {
+        // empty
+    }
+});
+```
+
+<figcaption>`onAnimationStart` and `onAnimationRepeat` are unused, but they still have to exist.</figcaption>
+
+### FINDING A DATABASE
+
+After toying around with the local data enough, it was time to face the ultimate challenge: _finding a database_. This was super tricky!
+I didn't know which were the most suitable options for my app, but it did eventually boil down to:
+
+1. Using the Android built-in `Room` database
+2. Using Firestore
+
+`Room` was a good solution that my friends and I were inclined towards, but we thought we could do better. What if we hooked up
+an online database? After searching, we found Firestore.
+
+Integrating Firestore into the app was a fun challenge. Though the project criteria did not require a hosted/serverless database, I'm glad
+I took the time to do it! The package provided such a great DX across on Android and it was a breeze to use it. I grasped the concept
+of NoSQL and real-time databases very quickly and it was cool to see everything fall into place.
+
+### USER AUTHENTICATION
+
+Managing user accounts was certainly a new one to me. I had no clue how to do so and taking the time to implement my own authentication
+method was going to be time-consuming (and also insecure, but I didn't know this). So I did some discussion with my classmates, eventually
+coming to Firebase as a possible solution.
+
+Skimming over the implementation, it seemed straightforward enough. Took a few days to hook it up, but eventually I managed to add Google
+sign-in! Not to glaze myself, but I was quite proud of this achievement. I could use some data from the account object that Firebase
+returned (such as the id) and created my own schema in Firestore (which was the)
+
+### GETTING THE SONGS IN
+
+Feeding songs into the app was quite a significant problem I faced, as I had absolutely no idea how I was
+going to do so. I _could_ research about serving content from my own server, but I'd suspected that the deadline wasn't far enough for that
+(it wasn't!).
+
+Eventually, I came up with a solution, albeit hacky.
+
+I downloaded various MP3s of songs off YouTube and uploaded the files to Discord. With this, I copied the public-facing CDN link of the
+file and pasted it into Firestore. I was using Discord's CDN to serve my own files. This miraculously worked, though I had _zero_ idea
+how it even did at the time.
+
+### ADDING PLAYLISTS
+
+```java
+public void createNewPlaylist(String title, String songId) {
+    Playlist playlist = new Playlist(title);
+    db.collection("playlists")
+            .add(playlist)
+            .addOnSuccessListener(docRef -> addSongToExistingPlaylist(docRef.getId(), songId))
+            .addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));
+}
+```
+
+<Alert type="info" title="Why is there a song id in the parameters?">
+	In order to get around some Firestore quirks, creating a new playlist requires the user to include a song
+	along with the name of the new playlist. This may seem unintuitive, but it also helps to reduce a
+	significant amount of code that might deem unnecessary.
+</Alert>
+
+<Alert type="info" title="Liking Songs">
+	Liking songs just added to a special default playlist assigned to each user. This is quite common amongst
+	music streaming apps!
+</Alert>

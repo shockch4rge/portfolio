@@ -1,0 +1,67 @@
+---
+interface Props {
+	title: string;
+	type: "info" | "warning" | "error" | "success";
+}
+
+const { type, title } = Astro.props;
+---
+
+<aside
+	id="alert"
+	data-type={type}
+	class:list={[
+		"-mx-8 mt-8 mb-12 px-7 py-6 rounded-sm not-prose relative",
+		{
+			"bg-blue-950/40 border-l-4 border-blue-400/50": type === "info",
+			"bg-green-950/40 border-l-4 border-green-400/50": type === "success",
+			"bg-yellow-950/40 border-l-4 border-yellow-400/50": type === "warning",
+			"bg-red-950/40 border-l-4 border-red-400/50": type === "error",
+		},
+	]}
+>
+	<h4
+		class:list={[
+			"mb-2 text-lg font-bold font-body",
+			{
+				"text-blue-400": type === "info",
+				"text-green-400": type === "success",
+				"text-yellow-400": type === "warning",
+				"text-red-400": type === "error",
+			},
+		]}
+	>
+		{title}
+	</h4>
+	<slot />
+</aside>
+
+<style is:global>
+	aside {
+		& > p {
+			@apply text-white font-body text-base;
+		}
+
+		& > a {
+			@apply text-base;
+		}
+	}
+
+	#alert {
+		&[data-type="info"] pre {
+			@apply bg-slate-900/80;
+		}
+
+		&[data-type="success"] pre {
+			@apply bg-green-900/20;
+		}
+
+		p {
+			@apply m-0;
+
+			& + p {
+				@apply mb-4;
+			}
+		}
+	}
+</style>

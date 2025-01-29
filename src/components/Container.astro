@@ -1,0 +1,20 @@
+---
+interface Props {
+	center?: boolean;
+	className?: string;
+	direction?: "row" | "col";
+}
+
+const { center = false, direction = "col", className } = Astro.props;
+---
+
+<div
+	class:list={[
+		"mt-12 px-8 sm:px-40 md:px-52 xl:px-[18rem] flex relative overflow-x-hidden",
+		center ? "items-center justify-center" : "items-start justify-start",
+		direction === "row" ? "flex-row" : "flex-col",
+		className,
+	]}
+>
+	<slot />
+</div>

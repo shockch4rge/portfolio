@@ -1,0 +1,46 @@
+[
+	{
+		"id": "typescript",
+		"iconUrl": "https://cdn.worldvectorlogo.com/logos/typescript.svg"
+	},
+	{
+		"id": "astro",
+		"iconUrl": "https://svgl.app/library/astro_dark.svg"
+	},
+	{
+		"id": "nextjs",
+		"iconUrl": "https://svgl.app/library/nextjs_icon_dark.svg"
+	},
+	{
+		"id": "discord",
+		"iconUrl": "https://svgl.app/library/discord.svg"
+	},
+	{
+		"id": "discordjs",
+		"iconUrl": "https://svgl.app/library/djs.svg"
+	},
+	{
+		"id": "payload",
+		"iconUrl": "https://svgl.app/library/payload_dark.svg"
+	},
+	{
+		"id": "java",
+		"iconUrl": "https://svgl.app/library/java.svg"
+	},
+	{
+		"id": "android",
+		"iconUrl": "https://svgl.app/library/android.svg"
+	},
+	{
+		"id": "nodejs",
+		"iconUrl": "https://svgl.app/library/nodejs.svg"
+	},
+	{
+		"id": "tailwindcss",
+		"iconUrl": "https://svgl.app/library/tailwindcss.svg"
+	},
+	{
+		"id": "cloudflare",
+		"iconUrl": "https://svgl.app/library/cloudflare.svg"
+	}
+]
