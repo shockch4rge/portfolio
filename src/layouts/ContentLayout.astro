@@ -37,6 +37,14 @@ const { title, headings } = Astro.props;
 <style is:global>
 	@reference "../../tailwind.css";
 
+	section {
+		@apply my-8;
+
+		& > section {
+			@apply my-12;
+		}
+	}
+
 	p {
 		@apply mb-6 text-pretty tracking-[0.01rem];
 	}
@@ -51,11 +59,11 @@ const { title, headings } = Astro.props;
 	}
 
 	h2 {
-		@apply mt-14 mb-8 text-3xl;
+		@apply mb-8 text-3xl;
 	}
 
 	h3 {
-		@apply mt-10 mb-8 text-xl text-pretty font-bold tracking-[0.2rem] font-display uppercase;
+		@apply mt-2 mb-8 text-xl text-pretty font-bold tracking-[0.2rem] font-display uppercase;
 	}
 
 	ol {
@@ -117,20 +125,21 @@ const { title, headings } = Astro.props;
 
 <script>
 	let observer: IntersectionObserver;
-	const headings = document.querySelectorAll("article > :is(h2, h3)");
+	const headings = document.querySelectorAll("article section");
 
 	const observe = () => {
 		if (observer) observer.disconnect();
 
-		observer = new IntersectionObserver(headings => {
+		observer = new IntersectionObserver(sections => {
 			if (observer)
-				for (const heading of headings) {
-					const id = heading.target.id;
+				for (const section of sections) {
+					const heading = section.target.querySelector("h2, h3")!;
+					const id = heading.getAttribute("id");
 					const link = document.querySelector(`article #toc li a[href="#${id}"]`);
 
 					if (!link) return;
 
-					const addRemove = heading.intersectionRatio > 0 ? "add" : "remove";
+					const addRemove = section.intersectionRatio > 0 ? "add" : "remove";
 					link.classList[addRemove]("text-indigo-400");
 				}
 		});

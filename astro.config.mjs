@@ -1,5 +1,6 @@
 // @ts-check
 import { defineConfig } from "astro/config";
+import remarkSectionize from "remark-sectionize";
 
 import mdx from "@astrojs/mdx";
 import remarkToc from "remark-toc";
@@ -22,7 +23,9 @@ export default defineConfig({
 			plugins: [pluginCollapsibleSections(), pluginCodeCaption(), ecTwoSlash()],
 			themes: ["github-dark-default"],
 		}),
-		mdx(),
+		mdx({
+			remarkPlugins: [remarkSectionize],
+		}),
 		react(),
 	],
 
