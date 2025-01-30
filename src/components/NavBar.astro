@@ -19,13 +19,13 @@ import Logo from "@assets/logo.svg";
 			id="#menu"
 			type="checkbox"
 			aria-label="Toggle Menu"
-			class="appearance-none m-0 px-1 md:hidden ph ph-list checked:ph-x text-primary text-4xl cursor-pointer focus-visible:ring rounded-md"
+			class="appearance-none m-0 px-1 md:hidden ph ph-list checked:ph-x text-primary text-4xl cursor-pointer focus-visible:ring-3 rounded-md"
 		/>
 	</div>
 	<div class="backdrop"></div>
 	<div class="backdrop-edge"></div>
 	<div
-		class="nav-links w-full h-screen p-24 hidden peer-has-[:checked]:flex flex-col space-y-4 bg-secondary absolute -left-full peer-has-[:checked]:translate-x-full duration-300 ease-in-out transition-transform"
+		class="nav-links w-full h-screen p-24 hidden peer-has-checked:flex flex-col space-y-4 bg-secondary absolute -left-full peer-has-checked:translate-x-full duration-300 ease-in-out transition-transform"
 	>
 		<NavLink href="/about">ABOUT ME</NavLink>
 		<NavLink href="/blog">BLOG</NavLink>
@@ -47,7 +47,7 @@ import Logo from "@assets/logo.svg";
 		.backdrop {
 			position: absolute;
 			inset: 0;
-			background: linear-gradient(to bottom theme(colors.secondary) 0%, transparent 50%);
+			background: linear-gradient(to bottom black 0%, transparent 50%);
 			backdrop-filter: blur(16px);
 			mask-image: linear-gradient(to bottom, black 0% 50%, transparent 50% 100%);
 			pointer-events: none;

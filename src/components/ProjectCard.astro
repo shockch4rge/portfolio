@@ -14,14 +14,15 @@ const tags = await getEntries(project.tags ?? []);
 ---
 
 <li
-	class="group min-h-64 col-span-1 bg-gray-600/10 text-gray-600 hover:text-white ring-2 ring-gray-400/25 hover:ring-primary ring-offset-4 ring-offset-gray-950/80 rounded-sm transition"
+	class="group min-h-64 col-span-1 bg-gray-600/10 text-gray-600 hover:text-white ring-2 ring-gray-400/25 hover:ring-primary ring-offset-4 ring-offset-gray-950/80 rounded-xs transition"
 >
 	<a class="h-full w-full p-6 block relative" href={`/projects/${project.id}`}>
 		<Glow
-			class="absolute -left-20 lg:left-0 -bottom-20 lg:bottom-0 scale-50 lg:scale-100 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"
+			id="project-card-glow"
+			class="absolute -left-20 lg:left-0 -bottom-20 lg:bottom-0 scale-50 lg:scale-100 transition-opacity pointer-events-none"
 		/>
 		<article class="flex flex-col space-y-4 justify-start text-start">
-			<h2 class="m-0 text-xl font-extrabold">{project.name}</h2>
+			<h2 class="text-xl font-extrabold">{project.name}</h2>
 			<div class="flex items-center space-x-2">
 				{
 					tags.map(
@@ -69,3 +70,34 @@ const tags = await getEntries(project.tags ?? []);
 		}
 	}
 </style>
+
+<!-- <script>
+	const card = document.querySelector("li")!;
+	const glow = document.querySelector("#project-card-glow")! as SVGAElement;
+	const rect = card.getBoundingClientRect();
+	let animate: Animation;
+
+	document.addEventListener("mousemove", e => {
+		const { clientX, clientY } = e;
+
+		animate = glow.animate(
+			{
+				left: clientX < rect.right && clientX > rect.left ? `${clientX}px` : "0px",
+				top: clientY < rect.bottom && clientY > rect.top ? `${clientY}px` : "0px",
+			},
+			{ duration: 1000, fill: "forwards" }
+		);
+	});
+
+	card.addEventListener("mouseenter", () => {
+		glow.style.opacity = "1";
+	});
+
+	card.addEventListener("mouseleave", () => {
+		glow.style.opacity = "0";
+		glow.style.left = "0";
+		glow.style.bottom = "0";
+
+		animate.finish();
+	});
+</script> -->

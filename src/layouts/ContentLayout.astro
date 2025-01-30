@@ -18,7 +18,7 @@ const { title, headings } = Astro.props;
 <BaseLayout title={title}>
 	<article
 		class:list={[
-			"*:min-w-0 *:col-start-1 *:md:col-start-2 *:col-span-1 *:font-body",
+			"*:min-w-0 *:col-start-1 md:*:col-start-2 *:col-span-1 *:font-body",
 			"px-8 sm:px-12 pt-12 sm:pt-16 pb-16 min-h-screen grid grid-cols-1 justify-center",
 			"sm:px-20",
 			"md:px-0 md:grid-cols-[1fr_60ch_1fr]",
@@ -35,6 +35,8 @@ const { title, headings } = Astro.props;
 </BaseLayout>
 
 <style is:global>
+	@reference "../../tailwind.css";
+
 	p {
 		@apply mb-6 text-pretty tracking-[0.01rem];
 	}
@@ -61,14 +63,18 @@ const { title, headings } = Astro.props;
 	}
 
 	.expressive-code {
-		@apply -mx-8 mt-8 mb-12 ring-2 ring-slate-800 ring-offset-2 ring-offset-slate-900 sm:rounded-md;
+		@apply -mx-8 mt-8 mb-12 frame-border;
 
 		#alert & {
 			@apply -mx-4;
 		}
 
+		frame {
+			@apply !border-none;
+		}
+
 		pre {
-			@apply !rounded-none;
+			@apply !rounded-none !border-0 !border-none;
 		}
 
 		:not(.has-title) {
@@ -86,6 +92,10 @@ const { title, headings } = Astro.props;
 				/* bg is a linear gradient for some reason */
 				background: none !important;
 				@apply !bg-gray-950 !rounded-none sm:!rounded-t-md;
+
+				&::before {
+					@apply !border-none;
+				}
 			}
 
 			.title {
@@ -106,10 +116,8 @@ const { title, headings } = Astro.props;
 </style>
 
 <script>
-	import { object } from "astro:schema";
-
 	let observer: IntersectionObserver;
-	const headings = document.querySelectorAll("article>:is(h2,h3)");
+	const headings = document.querySelectorAll("article > :is(h2, h3)");
 
 	const observe = () => {
 		if (observer) observer.disconnect();

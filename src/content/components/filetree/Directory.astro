@@ -6,15 +6,19 @@ interface Props extends DirectoryProps {}
 const { name, files, open = false } = Astro.props;
 ---
 
-<details class:list={[`dir-${name} group/${name}`]} open={open} onclick={!files ? "return false" : undefined}>
+<details
+	class:list={[`dir-${name} group select-none [&>details]:ml-7 [&[open]&>summary>#tree-connector]:block`]}
+	open={open}
+	onclick={!files ? "return false" : undefined}
+>
 	<summary
-		class={`group py-1.5 px-2 flex items-center text-gray-500 hover:text-gray-300 hover:bg-slate-800 rounded-sm relative transition-colors`}
+		class={`group py-1.5 px-2 flex items-center text-gray-500 hover:text-gray-300 hover:bg-slate-800 rounded-xs relative transition-colors`}
 	>
 		{
 			files?.map((_, i) => (
 				<svg
 					id="tree-connector"
-					class="hidden absolute h-full left-[-1px] font-bold select-none pointer-events-none group-last/${name}:bg-white"
+					class={`hidden absolute h-full left-[-1px] font-bold select-none pointer-events-none`}
 					style={{ bottom: `-${(i + 1) * 2}rem` }}
 					viewBox="0 0 30 30"
 					xmlns="http://www.w3.org/2000/svg"
@@ -58,31 +62,3 @@ const { name, files, open = false } = Astro.props;
 	</summary>
 	{files && files.map(f => <Astro.self name={f.name} files={f.files} open={f.open && open} />)}
 </details>
-
-<style>
-	details {
-		@apply select-none;
-
-		& > details {
-			@apply ml-7;
-		}
-
-		&[open] {
-			@apply mb-2;
-
-			& > summary > #tree-connector {
-				@apply block;
-			}
-		}
-	}
-
-	summary {
-		&::-webkit-details-marker {
-			@apply hidden;
-		}
-
-		&::marker {
-			@apply list-none;
-		}
-	}
-</style>

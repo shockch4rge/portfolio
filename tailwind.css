@@ -1,3 +1,183 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@theme {
+	--font-*: initial;
+	--font-display: JetBrains Mono, monospace;
+	--font-body: Satoshi Variable, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+		"Segoe UI Symbol", "Noto Color Emoji";
+
+	--breakpoint-xxs: 400px;
+	--breakpoint-2lg: 1160px;
+
+	--color-primary: #ffe292;
+	--color-secondary: #0f1522;
+
+	--animate-carousel: slide 10s linear infinite;
+	--animate-fade-in: fade-in 0.2s ease-in-out;
+
+	--cube-in: cubic-bezier(0.18, 0.89, 0.23, 1);
+
+	@keyframes slide {
+		from {
+			transform: translateX(-20%);
+		}
+		to {
+			transform: translateX(calc(-120% - 1.5rem));
+		}
+	}
+	@keyframes fade-in {
+		from {
+			opacity: 0;
+		}
+		to {
+			opacity: 1;
+		}
+	}
+}
+
+@layer base {
+	*,
+	::after,
+	::before {
+		box-sizing: border-box;
+	}
+
+	body {
+		::selection {
+			background: var(--color-white);
+			color: var(--color-secondary);
+		}
+
+		:focus-within {
+			outline-color: var(--color-white);
+		}
+
+		scrollbar-gutter: stable;
+	}
+
+	@font-face {
+		src: url("/fonts/Satoshi-Variable.ttf") format("truetype");
+		font-family: "Satoshi Variable";
+		font-style: normal;
+		font-display: swap;
+	}
+
+	@font-face {
+		src: url("/fonts/JetBrainsMono.ttf") format("truetype");
+		font-family: "JetBrains Mono";
+		font-style: normal;
+		font-display: swap;
+	}
+
+	h1,
+	h2,
+	p,
+	label {
+		font-family: var(--font-body);
+	}
+
+	h3,
+	h4,
+	h5,
+	h6,
+	button {
+		font-family: var(--font-display);
+	}
+
+	h1 {
+		color: var(--color-white);
+		font-size: var(--text-4xl);
+		line-height: var(--tw-leading, var(--text-4xl--line-height));
+		font-weight: var(--font-weight-bold);
+
+		@media (width >= theme(--breakpoint-lg)) {
+			font-size: var(--text-5xl);
+			line-height: var(--tw-leading, var(--text-5xl--line-height));
+			font-weight: var(--font-weight-bold);
+		}
+
+		/* @apply text-white text-4xl lg:text-5xl font-bold font-body; */
+	}
+
+	h2 {
+		color: var(--color-white);
+		font-size: var(--text-3xl);
+		line-height: var(--tw-leading, var(--text-3xl--line-height));
+		font-weight: var(--font-weight-bold);
+
+		/* @apply text-white text-3xl font-bold; */
+	}
+
+	h3 {
+		color: var(--color-primary);
+		font-size: var(--text-xl);
+		line-height: var(--tw-leading, var(--text-xl--line-height));
+		font-weight: var(--font-weight-semibold);
+
+		/* @apply text-primary text-xl font-semibold tracking-[0.25rem]; */
+	}
+
+	h4 {
+		color: var(--color-white);
+		font-size: var(--text-xl);
+	}
+
+	p {
+		color: var(--color-white);
+		font-size: var(--text-lg);
+		line-height: var(--leading-relaxed);
+		max-width: 65ch;
+
+		/* @apply text-white text-lg leading-relaxed max-w-prose; */
+	}
+
+	summary {
+		::-webkit-details-marker {
+			display: none;
+		}
+
+		::marker {
+			list-style: none;
+		}
+	}
+
+	/*
+	The default border color has changed to `currentColor` in Tailwind CSS v4,
+	so we've added these compatibility styles to make sure everything still
+	looks the same as it did with Tailwind CSS v3.
+
+	If we ever want to remove these styles, we need to add an explicit border
+	color utility to any element that depends on these defaults.
+	*/
+	*,
+	::after,
+	::before,
+	::backdrop,
+	::file-selector-button {
+		border-color: var(--color-gray-200, currentColor);
+	}
+}
+
+@utility container {
+	@media (width >= theme(--breakpoint-lg)) {
+		padding-inline: 16rem;
+	}
+}
+
+@utility frame-border {
+	border: 2px var(--tw-border-style) var(--color-gray-600);
+
+	--tw-ring-color: var(--color-slate-800);
+	--tw-ring-offset-width: 2px;
+	--tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+
+	box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow),
+		var(--tw-ring-shadow), var(--tw-shadow);
+	background-color: color-mix(in oklab, var(--color-black) /* #000 = #000000 */ 20%, transparent);
+
+	@media (width >= theme(--breakpoint-sm)) {
+		border-radius: var(--radius-md);
+	}
+
+	@apply border-2 border-gray-600 ring-2 ring-slate-800 ring-offset-2 ring-offset-slate-900 bg-black/20 sm:rounded-md;
+}

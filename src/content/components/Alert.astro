@@ -11,7 +11,8 @@ const { type, title } = Astro.props;
 	id="alert"
 	data-type={type}
 	class:list={[
-		"-mx-8 mt-8 mb-12 px-7 py-6 rounded-sm not-prose relative",
+		"[&>p]:text-white",
+		"-mx-8 mt-8 mb-12 px-7 py-6 rounded-xs not-prose relative",
 		{
 			"bg-blue-950/40 border-l-4 border-blue-400/50": type === "info",
 			"bg-green-950/40 border-l-4 border-green-400/50": type === "success",
@@ -37,8 +38,13 @@ const { type, title } = Astro.props;
 </aside>
 
 <style is:global>
+	@reference "../../../tailwind.css";
+
 	aside {
 		& > p {
+			color: var(--color-white);
+			font-family: var(--font-body);
+
 			@apply text-white font-body text-base;
 		}
 

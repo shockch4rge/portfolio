@@ -1,6 +1,8 @@
 import type { ComponentProps } from "react";
 import "./index.css";
 
+import { cn } from "src/util/cn";
+
 type Props = Pick<
 	ComponentProps<"input">,
 	"id" | "className" | "defaultValue" | "aria-label" | "children" | "min" | "max" | "alt"
@@ -17,7 +19,7 @@ export const Slider: React.FC<Props> = ({ id, onChange, className, children, ...
 			<input
 				id={id}
 				type="range"
-				className={className}
+				className={cn(className)}
 				onChange={e => {
 					e.preventDefault();
 					return onChange(+e.target.value);

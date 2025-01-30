@@ -45,7 +45,7 @@ export const Toc: React.FC<Props> = ({ headings }) => {
 				"row-start-1 row-[span_1_/_span_300]",
 				"hidden lg:block",
 				"sticky top-40", // height of navbar + top container padding
-				"text-slate-700 rounded-sm scroll-mt-8"
+				"text-slate-700 rounded-xs scroll-mt-8"
 			)}
 			aria-label="Table of contents"
 			initial={{

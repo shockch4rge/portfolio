@@ -17,10 +17,10 @@ const tags = await getEntries(data);
 			.map(t => t.data)
 			.map(({ id, iconUrl }) => (
 				<a
-					class="px-2 py-1 flex items-center space-x-2 text-sm text-white font-body no-underline bg-slate-800/60 hover:bg-slate-800 hover:-translate-y-0.5 active:translate-y-0 ring-2 ring-slate-800 rounded-sm transition"
+					class="px-2 py-1 flex items-center space-x-2 text-sm text-white font-body no-underline bg-slate-800/60 hover:bg-slate-800 hover:-translate-y-0.5 active:translate-y-0 ring-2 ring-slate-800 rounded-xs transition"
 					href="/"
 				>
-					{iconUrl && <img src={iconUrl} alt={`${id} logo`} width={16} height={16} class="m-0" />}
+					{iconUrl && <img src={iconUrl} alt={`${id} logo`} width={16} height={16} />}
 					<div>{id}</div>
 				</a>
 			))
