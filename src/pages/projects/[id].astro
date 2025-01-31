@@ -24,12 +24,10 @@ const {
 <>
 	<ContentLayout title={name} headings={headings} tags={tags}>
 		<h1>{name}</h1>
-
-		<p class="font-display text-gray-600 font-medium">
-			Published on {new Date(pubDate).toLocaleDateString()}, last updated {
-				new Date().toLocaleDateString()
+		<div class="mb-6 font-display font-medium text-gray-600">
+			Published on {new Date(pubDate).toLocaleDateString()}
 			}
-		</p>
+		</div>
 		<Tags data={tags ?? []} />
 		<Content />
 		{related && <RelatedProjects slot="related-projects" id={project.id} />}
