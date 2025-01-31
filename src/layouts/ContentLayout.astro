@@ -2,8 +2,7 @@
 import type { MarkdownHeading } from "astro";
 
 import BaseLayout from "./BaseLayout.astro";
-import { Toc } from "@content/components/toc/Toc";
-import type { Tag } from "src/content.config";
+import Toc from "@content/components/toc/Toc.astro";
 import type { InferEntrySchema } from "astro:content";
 
 interface Props {
@@ -18,7 +17,7 @@ const { title, headings } = Astro.props;
 <BaseLayout title={title}>
 	<article
 		class:list={[
-			"*:min-w-0 *:col-start-1 md:*:col-start-2 *:col-span-1 *:font-body",
+			"*:not-[#toc]:col-start-1 md:*:not-[#toc]:col-start-2 *:col-span-1 *:font-body",
 			"px-8 sm:px-12 pt-12 sm:pt-16 pb-16 min-h-screen grid grid-cols-1 justify-center",
 			"sm:px-20",
 			"md:px-0 md:grid-cols-[1fr_60ch_1fr]",
@@ -28,7 +27,7 @@ const { title, headings } = Astro.props;
 		]}
 	>
 		<slot />
-		<Toc client:load headings={headings} />
+		<Toc headings={headings} />
 	</article>
 	<slot name="related-projects" />
 	<slot name="related-blogs" />
@@ -63,26 +62,22 @@ const { title, headings } = Astro.props;
 	}
 
 	h3 {
-		@apply mt-2 mb-8 text-xl text-pretty font-bold tracking-[0.2rem] font-display uppercase;
+		@apply my-8 text-xl text-pretty font-bold tracking-[0.2rem] font-display uppercase;
 	}
 
 	ol {
-		@apply mb-12 text-white space-y-4 text-base;
+		@apply mb-4 text-white space-y-4 text-base;
 	}
 
 	.expressive-code {
 		@apply -mx-8 mt-8 mb-12 frame-border;
 
-		#alert & {
-			@apply -mx-4;
-		}
-
-		frame {
+		.frame {
 			@apply !border-none;
-		}
 
-		pre {
-			@apply !rounded-none !border-0 !border-none;
+			pre {
+				@apply !rounded-none !border-0 !border-none !bg-black/20;
+			}
 		}
 
 		:not(.has-title) {
@@ -92,6 +87,8 @@ const { title, headings } = Astro.props;
 		}
 
 		.has-title {
+			overflow: hidden;
+
 			pre {
 				@apply sm:!rounded-b-md;
 			}
@@ -114,6 +111,39 @@ const { title, headings } = Astro.props;
 		}
 	}
 
+	#alert {
+		& > p {
+			color: var(--color-white);
+			font-family: var(--font-body);
+
+			@apply text-white font-body text-base;
+		}
+
+		& > a {
+			@apply text-base;
+		}
+
+		.expressive-code {
+			@apply -mx-4;
+		}
+
+		&[data-type="info"] .expressive-code .frame.has-title .header {
+			@apply !bg-slate-950/70 !rounded-sm;
+		}
+
+		&[data-type="success"] pre {
+			@apply bg-green-900/20;
+		}
+
+		p {
+			@apply m-0;
+
+			& + p {
+				@apply mb-4;
+			}
+		}
+	}
+
 	code:not(.expressive-code code) {
 		@apply px-1 py-1.5 rounded-sm text-sm bg-gray-800/80 whitespace-nowrap;
 	}
@@ -125,7 +155,7 @@ const { title, headings } = Astro.props;
 
 <script>
 	let observer: IntersectionObserver;
-	const headings = document.querySelectorAll("article section");
+	const sections = document.querySelectorAll("article section");
 
 	const observe = () => {
 		if (observer) observer.disconnect();
@@ -144,8 +174,8 @@ const { title, headings } = Astro.props;
 				}
 		});
 
-		for (const heading of headings) {
-			observer.observe(heading);
+		for (const section of sections) {
+			observer.observe(section);
 		}
 	};
 
