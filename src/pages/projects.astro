@@ -5,14 +5,26 @@ import BaseLayout from "@layouts/BaseLayout.astro";
 import { getProjects } from "../content.config";
 
 const projects = await getProjects();
+
+const hasProjects = projects.length > 0;
 ---
 
 <BaseLayout title="Projects">
-	<Container className="items-center h-screen">
+	<Container className="mt-12">
 		<h1 class="mt-4 self-start">projects.</h1>
-		<ul class="w-full mt-14 p-2 grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-10">
-			{projects.map(({ id, data }, i) => <ProjectCard index={i} project={{ id, ...data }} />)}
-		</ul>
-		<h3 class="my-28 text-white text-center text-xl md:text-2xl lg:text-3xl">...and more to come!</h3>
+		{
+			hasProjects && (
+				<ul class="w-full mt-14 p-2 grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-10">
+					{projects.map(({ id, data }, i) => (
+						<ProjectCard index={i} project={{ id, ...data }} />
+					))}
+				</ul>
+			)
+		}
+		{
+			!hasProjects && (
+				<h2 class="mt-24 w-full flex flex-col space-y-6 text-white text-4xl">Check back soon...</h2>
+			)
+		}
 	</Container>
 </BaseLayout>
