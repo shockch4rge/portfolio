@@ -3,8 +3,8 @@ import NavLink from "./NavLink.astro";
 import Logo from "@assets/logo.svg";
 ---
 
-<nav class="w-full h-20 px-8 sm:px-20 lg:px-24 flex z-50 sticky top-0 bg-black/20 transition-colors">
-	<div class="peer w-full flex justify-between items-center z-40">
+<header class="w-full h-20 px-8 sm:px-20 lg:px-24 flex z-50 sticky top-0 transition-colors">
+	<nav class="peer w-full flex justify-between items-center z-40">
 		<a href="/" aria-label="return to home page">
 			<Logo class="w-16 md:w-20 h-16 md:h-20" aria-label="my logo. spells out f-a-v-i, period" />
 		</a>
@@ -21,24 +21,22 @@ import Logo from "@assets/logo.svg";
 			aria-label="Toggle Menu"
 			class="appearance-none m-0 px-1 md:hidden ph ph-list checked:ph-x text-primary text-4xl cursor-pointer focus-visible:ring-3 rounded-md"
 		/>
-	</div>
+	</nav>
 	<div class="backdrop"></div>
 	<div class="backdrop-edge"></div>
-	<div
+	<nav
 		class="nav-links w-full h-screen p-24 hidden peer-has-checked:flex flex-col space-y-4 bg-secondary absolute -left-full peer-has-checked:translate-x-full duration-300 ease-in-out transition-transform"
 	>
 		<NavLink href="/about">ABOUT ME</NavLink>
 		<NavLink href="/blog">BLOG</NavLink>
 		<NavLink href="/projects">PROJECTS</NavLink>
 		<NavLink href="/contact">CONTACT</NavLink>
-	</div>
-</nav>
+	</nav>
+</header>
 
 <script>
-	document.addEventListener("astro:page-load", () => {
-		document.querySelector("#menu")!.addEventListener("click", () => {
-			document.querySelector(".nav-links")!.classList.toggle("expanded");
-		});
+	document.querySelector("#menu")!.addEventListener("click", () => {
+		document.querySelector(".nav-links")!.classList.toggle("expanded");
 	});
 </script>
 
@@ -47,7 +45,7 @@ import Logo from "@assets/logo.svg";
 		.backdrop {
 			position: absolute;
 			inset: 0;
-			background: linear-gradient(to bottom black 0%, transparent 50%);
+			background: linear-gradient(to bottom var(--color-secondary) 0%, transparent 50%);
 			backdrop-filter: blur(16px);
 			mask-image: linear-gradient(to bottom, black 0% 50%, transparent 50% 100%);
 			pointer-events: none;
@@ -62,3 +60,14 @@ import Logo from "@assets/logo.svg";
 		}
 	}
 </style>
+
+<script>
+	const header = document.querySelector("header")!;
+
+	const observer = new IntersectionObserver(
+		([e]) => e.target.classList.toggle("bg-transparent", e.intersectionRatio < 1),
+		{ threshold: [1], rootMargin: "4px 0px 0px 0px" }
+	);
+
+	observer.observe(header);
+</script>
