@@ -1,0 +1,33 @@
+---
+import type { Heading } from "./Toc.astro";
+
+type Props = { heading: Heading };
+
+const { heading } = Astro.props;
+const isSubheading = heading.depth === 3;
+---
+
+<li
+	class:list={[
+		`${isSubheading ? "ml-6 text-sm min-h-6" : "flex flex-col"}`,
+		"text-base font-body font-medium text-gray-600 hover:text-gray-400 transition-colors",
+	]}
+>
+	<a class:list={["py-1", isSubheading && "block w-full"]} href={`#${heading.slug}`}>
+		{
+			heading.text
+				.split(" ")
+				.map(s => `${s.charAt(0).toUpperCase()}${s.slice(1).toLowerCase()}`)
+				.join(" ")
+		}
+		{
+			heading.subheadings.length > 0 && (
+				<ul class="h-fit mb-1.5">
+					{heading.subheadings.map(subheading => (
+						<Astro.self heading={subheading} />
+					))}
+				</ul>
+			)
+		}
+	</a>
+</li>

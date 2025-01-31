@@ -1,0 +1,74 @@
+---
+import type { MarkdownHeading } from "astro";
+
+import TocHeading from "./TocHeading.astro";
+
+type Props = {
+	headings: MarkdownHeading[];
+};
+
+export type Heading = MarkdownHeading & {
+	subheadings: Heading[];
+};
+
+const buildToc = (headings: MarkdownHeading[]) => {
+	const toc: Heading[] = [];
+	const parentHeadings = new Map<number, Heading>();
+
+	for (const h of headings) {
+		if (h.depth === 1) continue;
+		const heading = { ...h, subheadings: [] };
+		parentHeadings.set(heading.depth, heading);
+
+		if (heading.depth === 2) {
+			toc.push(heading);
+			continue;
+		}
+
+		parentHeadings.get(heading.depth - 1)!.subheadings.push(heading);
+	}
+
+	return toc;
+};
+
+const { headings } = Astro.props;
+const toc = buildToc(headings);
+---
+
+<nav
+	id="toc"
+	class:list={[
+		"place-self-end self-start !col-start-3 contents-center",
+		"row-start-1 row-[span_1_/_span_300]",
+		"hidden lg:block",
+		"sticky top-40", // height of navbar + top container padding
+		"text-slate-700 rounded-xs scroll-mt-8",
+	]}
+	aria-label="Table of contents"
+>
+	<div class="mb-4 text-lg text-primary font-bold font-body tracking-[0.2rem]">CONTENTS</div>
+	<ul>
+		{toc.map(h => <TocHeading heading={h} />)}
+	</ul>
+</nav>
+
+<style>
+	#toc {
+		animation-name: animateIn;
+		animation-duration: 1.4s;
+		animation-fill-mode: forwards;
+		animation-timing-function: var(--cube-in);
+	}
+
+	@keyframes animateIn {
+		0% {
+			opacity: 0;
+			transform: translateY(30px);
+		}
+
+		100% {
+			opacity: 1;
+			transform: translateY(0px);
+		}
+	}
+</style>
