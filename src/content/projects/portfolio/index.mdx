@@ -2,7 +2,7 @@
 name: "Portfolio"
 description: "This website you're viewing right now :)"
 pubDate: "2025-06-01"
-draft: false
+draft: true
 tags:
     - "typescript"
     - "astro"
@@ -19,12 +19,20 @@ import GridExample from "./components/grid-example/index.astro";
 import PaddingExample from "./components/padding-example/index.astro";
 
 Finally, a portfolio website after 5 years of programming! Honestly, I'm quite surprised that it took me this
-long to complete one. This website is the successor to a few previous, unfinished versions.
+long to complete one. I'd always thought about making my own blog. In this post, I'll go over the difficulties making one that suited
+my taste,
 
 ## The Predecessors
 
-A few years ago, I initially sprung for a React app, as I was recently got comfortable with using it. But that version was pretty
-badly implemented and I didn't think about how a blog would work or was populated on a Vite SPA (Single Page App).
+This site is not the first edition that came about.
+A few years ago, as someone who already built multiple webapps with React and was well-settled into it,
+I decided to use it for my portfolio. But that version was pretty badly implemented because I didn't consider some of the issues with
+building portfolio as a SPA.
+
+Some of these things were:
+
+1. Blog population - how was I going to write my blog posts? I did not wish to write HTML for everything....
+2.
 
 _Overall, not the best-planned project..._
 
@@ -37,8 +45,6 @@ It was certainly an improvement, but there were a number of problems. The code i
 I was doing in Astro. I couldn't get many things to work and
 managing <Link href="https://github.com/tailwindlabs/tailwindcss-typography">Tailwind's typography</Link> styles was a complete
 mess. Additionally, my dislike of the website's aesthetic led me to eventually neglect it.
-
--
 
 ## An Upgrade
 
