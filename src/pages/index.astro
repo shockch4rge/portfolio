@@ -38,32 +38,26 @@ const timelineData = [
 			Hey. I'm&nbsp;Favian,
 		</h1>
 		<TextCarousel />
-		<div class="absolute bottom-8 -space-y-6">
+		<div class="flex flex-col absolute bottom-8 -space-y-6">
 			{
 				Array(2)
 					.fill(0)
 					.map((_, i) => (
-						<i
-							class={`fa fa-chevron-down block text-slate-700 text-4xl animate-bounce delay-[${200 * i}]`}
-						/>
+						<i class={`fa fa-chevron-down block text-slate-700 text-4xl animate-pulse`} />
 					))
 			}
 		</div>
 	</Container>
-	<section class="grid mx-72 grid-cols-4 items-center gap-4">
-		<h1 class="my-8 col-span-full">About Me</h1>
-		<p
-			class="col-span-2 p-4 rounded-md bg-gray-950/40 ring-2 ring-gray-600 ring-offset-4 ring-offset-gray-800"
-		>
+	<section class="grid mx-72 my-24 items-center gap-4">
+		<h1 class="my-8">About Me</h1>
+		<p>
 			<span class="font-bold italic">Inspect Element.</span> As a secondary school student bored in the computer
 			lab, I was fidgeting around a website and came across an option named 'Inspect Element'. Curious, I
 			clicked it. I was immediately shown the intricate inner workings of the website and my mind was blown,
 			completely fascinated by the power and customisibility I possessed. Since then, I've never looked back.
 		</p>
 
-		<Image src={SgFlag} alt="Singapore flag" class="col-span-2 aspect-3/2" />
-
-		<p class="col-span-2">
+		<p>
 			In my free time, I play various musical instruments, from guitars to pianos and even saxophone (to
 			an extent). Recently, I've been jamming with a friend and we plan to start a small band for gigs at
 			open mic nights.
@@ -76,7 +70,7 @@ const timelineData = [
 
 		<p>
 			I created this portfolio as a way to showcase the journey I've taken so far in my career. The
-			Projects page contains some of my proudest work I've done up to now, with each post detailing an
+			'projects' page contains some of my proudest work I've done up to now, with each post detailing an
 			overview of the project, overcoming simple-to-difficult roadblocks, and maybe even some cool facts
 			about the development process. I delve deep into the challenges I face to understand why they exist
 			on an atomic level, rather than slapping a band-aid solution from StackOverflow and calling it a
@@ -85,7 +79,7 @@ const timelineData = [
 	</section>
 </BaseLayout>
 
-<script>
+<!-- <script>
 	// fade in elements that come into screen
 	const elements = document.querySelectorAll(".fade-in");
 	const options = {
@@ -107,7 +101,7 @@ const timelineData = [
 	elements.forEach(element => {
 		observer.observe(element);
 	});
-</script>
+</script> -->
 
 <style>
 	.fade-in {
