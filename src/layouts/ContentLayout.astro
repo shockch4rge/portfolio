@@ -111,39 +111,6 @@ const { title, headings } = Astro.props;
 		}
 	}
 
-	#alert {
-		& > p {
-			color: var(--color-white);
-			font-family: var(--font-body);
-
-			@apply text-white font-body text-base;
-		}
-
-		& > a {
-			@apply text-base;
-		}
-
-		.expressive-code {
-			@apply -mx-4;
-		}
-
-		&[data-type="info"] .expressive-code .frame.has-title .header {
-			@apply !bg-slate-950/70 !rounded-sm;
-		}
-
-		&[data-type="success"] pre {
-			@apply bg-green-900/20;
-		}
-
-		p {
-			@apply m-0;
-
-			& + p {
-				@apply mb-4;
-			}
-		}
-	}
-
 	code:not(.expressive-code code) {
 		@apply px-1 py-1.5 rounded-sm text-sm bg-gray-800/80 whitespace-nowrap;
 	}

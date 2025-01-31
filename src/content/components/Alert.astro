@@ -40,34 +40,37 @@ const { type, title } = Astro.props;
 <style is:global>
 	@reference "../../../tailwind.css";
 
-	aside {
-		& > p {
-			color: var(--color-white);
-			font-family: var(--font-body);
-
-			@apply text-white font-body text-base;
-		}
-
-		& > a {
-			@apply text-base;
-		}
-	}
-
 	#alert {
 		&[data-type="info"] pre {
-			@apply bg-slate-900/80;
+			@apply bg-slate-900/80 border-2 border-l-blue-500;
 		}
 
 		&[data-type="success"] pre {
 			@apply bg-green-900/20;
 		}
 
-		p {
-			@apply m-0;
+		a {
+			@apply text-base;
+		}
 
-			& + p {
-				@apply mb-4;
+		p {
+			@apply mb-4 text-white font-body text-base;
+
+			&:last-child {
+				@apply mb-0;
 			}
+		}
+
+		.expressive-code {
+			@apply -mx-4;
+		}
+
+		&[data-type="info"] .expressive-code .frame.has-title .header {
+			@apply !bg-slate-950/70 !rounded-sm;
+		}
+
+		&[data-type="success"] pre {
+			@apply bg-green-900/20;
 		}
 	}
 </style>
