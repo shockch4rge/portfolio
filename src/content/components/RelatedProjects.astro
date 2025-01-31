@@ -11,8 +11,6 @@ interface Props {
 
 const { id } = Astro.props;
 
-console.log(id);
-
 const project = await getEntry("projects", id)!;
 const related = await getEntries([project, project, project]);
 ---
