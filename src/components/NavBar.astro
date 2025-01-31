@@ -16,7 +16,7 @@ import Logo from "@assets/logo.svg";
 			</div>
 		</div>
 		<input
-			id="#menu"
+			id="menu"
 			type="checkbox"
 			aria-label="Toggle Menu"
 			class="appearance-none m-0 px-1 md:hidden ph ph-list checked:ph-x text-primary text-4xl cursor-pointer focus-visible:ring-3 rounded-md"
@@ -38,6 +38,15 @@ import Logo from "@assets/logo.svg";
 	document.querySelector("#menu")!.addEventListener("click", () => {
 		document.querySelector(".nav-links")!.classList.toggle("expanded");
 	});
+
+	const header = document.querySelector("header")!;
+
+	const observer = new IntersectionObserver(
+		([e]) => e.target.classList.toggle("bg-transparent", e.intersectionRatio < 1),
+		{ threshold: [1], rootMargin: "4px 0px 0px 0px" }
+	);
+
+	observer.observe(header);
 </script>
 
 <style>
@@ -60,14 +69,3 @@ import Logo from "@assets/logo.svg";
 		}
 	}
 </style>
-
-<script>
-	const header = document.querySelector("header")!;
-
-	const observer = new IntersectionObserver(
-		([e]) => e.target.classList.toggle("bg-transparent", e.intersectionRatio < 1),
-		{ threshold: [1], rootMargin: "4px 0px 0px 0px" }
-	);
-
-	observer.observe(header);
-</script>
