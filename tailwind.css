@@ -15,7 +15,8 @@
 	--animate-carousel: slide 10s linear infinite;
 	--animate-fade-in: fade-in 0.2s ease-in-out;
 
-	--cube-in: cubic-bezier(0.18, 0.89, 0.23, 1);
+	--ease-in-cubic: cubic-bezier(0.18, 0.89, 0.23, 1);
+	--ease-in-jerk: cubic-bezier(0.14, -0.53, 0, 1);
 
 	@keyframes slide {
 		from {
@@ -32,8 +33,6 @@
 		to {
 			opacity: 1;
 		}
-	}
-	@keyframes cube-in {
 	}
 }
 
@@ -192,4 +191,34 @@
 	}
 
 	@apply border-2 border-gray-600 ring-2 ring-slate-800 ring-offset-2 ring-offset-slate-900 bg-black/20 sm:rounded-md;
+}
+
+@custom-variant cb {
+	.expressive-code {
+		@slot !important;
+	}
+}
+
+@custom-variant cbf {
+	.expressive-code .frame {
+		@slot !important;
+	}
+}
+
+@custom-variant cbp {
+	.expressive-code .frame pre {
+		@slot !important;
+	}
+}
+
+@custom-variant cbt {
+	.expressive-code .frame .has-title .title {
+		@slot !important;
+	}
+}
+
+@custom-variant cbh {
+	.expressive-code .frame .has-title .header {
+		@slot !important;
+	}
 }
