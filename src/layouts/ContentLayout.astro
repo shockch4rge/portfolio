@@ -36,37 +36,36 @@ const { title, headings } = Astro.props;
 <style is:global>
 	@reference "../../tailwind.css";
 
+	h1 {
+		@apply text-5xl mb-14;
+	}
+
 	section {
 		@apply my-8;
 
 		& > section {
 			@apply my-12;
 		}
-	}
 
-	p {
-		@apply mb-6 text-pretty tracking-[0.01rem];
-	}
+		& > p {
+			@apply mb-6 text-pretty tracking-[0.01rem];
+		}
 
-	h1 {
-		@apply text-5xl mb-14;
-	}
+		& > :is(h2, h3) {
+			@apply text-primary scroll-mt-28;
+		}
 
-	h2,
-	h3 {
-		@apply text-primary scroll-mt-28;
-	}
+		& > h2 {
+			@apply mb-8 text-3xl;
+		}
 
-	h2 {
-		@apply mb-8 text-3xl;
-	}
+		& > h3 {
+			@apply mt-16 mb-8 text-xl text-pretty font-bold tracking-[0.2rem] font-display uppercase;
+		}
 
-	h3 {
-		@apply my-8 text-xl text-pretty font-bold tracking-[0.2rem] font-display uppercase;
-	}
-
-	ol {
-		@apply ml-10 mb-12 text-white space-y-4 text-lg;
+		& > ol {
+			@apply ml-10 mb-12 text-white space-y-4 text-lg;
+		}
 	}
 
 	.expressive-code {
@@ -121,6 +120,7 @@ const { title, headings } = Astro.props;
 </style>
 
 <script>
+	// mark active toc links
 	let observer: IntersectionObserver;
 	const sections = document.querySelectorAll("article section");
 
@@ -136,8 +136,14 @@ const { title, headings } = Astro.props;
 
 					if (!link) return;
 
-					const addRemove = section.intersectionRatio > 0 ? "add" : "remove";
-					link.classList[addRemove]("text-indigo-400");
+					if (section.intersectionRatio > 0) {
+						link.classList.replace("text-gray-600", "text-indigo-400");
+						link.classList.replace("hover:text-gray-400", "hover:text-indigo-300");
+						continue;
+					}
+
+					link.classList.replace("text-indigo-400", "text-gray-600");
+					link.classList.replace("hover:text-indigo-300", "hover:text-gray-400");
 				}
 		});
 
