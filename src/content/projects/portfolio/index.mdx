@@ -1,11 +1,13 @@
 ---
 name: "Portfolio"
-description: "This website you're viewing right now :)"
-pubDate: "2025-06-01"
-draft: true
+description: "This very website :)"
+pubDate: "2025-02-01"
+draft: false
 tags:
     - "typescript"
     - "astro"
+    - "react"
+    - "motion"
     - "tailwindcss"
     - "cloudflare"
 ---
@@ -18,57 +20,78 @@ import OldSite1 from "./assets/old_site_1.png";
 import GridExample from "./components/grid-example/index.astro";
 import PaddingExample from "./components/padding-example/index.astro";
 
-Finally, a portfolio website after 5 years of programming! Honestly, I'm quite surprised that it took me this
-long to complete one. I'd always thought about making my own blog. In this post, I'll go over the difficulties making one that suited
-my taste,
+export const components = { a: Link };
+
+After 5 years of programming, I've finally launched my own portfolio! Honestly, I'm quite surprised that it took me this
+long to complete one, as I'd always wanted to make my own blog. In this post, I'll go in-depth into the process of making one that suited
+my taste and holds up well in today's standards.
 
 ## The Predecessors
 
+To start off, I wanted these baseline features in my website:
+
+1. A blog. Somewhere I could write about my thoughts and whatever new JS frontend framework was being released this month.
+2. Project showcase. A place to review some of the sites that I was the proudest of.
+3. About. A summary of my character.
+4. A contact page. Not really sure how I would implement this but perhaps it could be a few external profile links like Twitter, LinkedIn, etc...
+
 This site is not the first edition that came about.
-A few years ago, as someone who already built multiple webapps with React and was well-settled into it,
-I decided to use it for my portfolio. But that version was pretty badly implemented because I didn't consider some of the issues with
-building portfolio as a SPA.
+I had already built multiple webapps with React + Vite and was well-settled into it, thus I immediately jumped into using it for my portfolio site.
+Regrettably, this ended up backfiring pretty badly as I didn't consider some of the issues with building a portfolio as a SPA.
 
 Some of these things were:
 
-1. Blog population - how was I going to write my blog posts? I did not wish to write HTML for everything....
-2.
+1. Blog population - how was I going to write my blog posts? I did not wish to type HTML or create components for everything!
+2. Do I really need so much JS interactivity for a simple portfolio website?
+3. Writing the entire site in Vite proved a little too barebones. I needed something that would be robust and help me develop quickly -
+   not force me to develop my own workflow pipeline.
 
 _Overall, not the best-planned project..._
 
-For my second attempt, I used Astro for the first time. 3.0 had recently released and I had heard a lot of excitement about the
-new hot thing; server islands. I used Tailwind with it. Here's what it looked like:
+So I went to do some research. Eventually, I came across [MDX](https://mdxjs.com); an upgraded form of Markdown, which allows you to use components from
+libraries/frameworks like Vue, React and Astro directly in your markdown content. This seemed incredibly fitting for me as I wanted a way to
+quickly write content but also give myself some freedom to create custom components.
+
+I explored frameworks that supported MDX and landed on Astro. As luck would have it, 3.0 had recently released and I had heard a lot of exciting
+prospects about it. Here's what it looked like:
 
 <Media src={OldSite1} alt="Old site" />
 
 It was certainly an improvement, but there were a number of problems. The code itself was _super_ buggy because I had zero clue of what
-I was doing in Astro. I couldn't get many things to work and
-managing <Link href="https://github.com/tailwindlabs/tailwindcss-typography">Tailwind's typography</Link> styles was a complete
-mess. Additionally, my dislike of the website's aesthetic led me to eventually neglect it.
+I was doing in the framework. I couldn't get many things to work and
+managing [Tailwind's typography](https://github.com/tailwindlabs/tailwindcss-typography) styles was a complete
+mess. Moreover, I actually disliked the website's aesthetic; I thought it was too amateur-y and didn't feel genuine enough.
+Combined with the inevitable piles of other schoolwork projects, I eventually lost motivation and ultimately abandoned it.
 
 ## An Upgrade
 
-There was a major design overhaul, coupled with the fact that I actually built a prototype in Figma instead of winging it.
-This site was built with the following tools:
+Fast forward a few years, and I was ready to start building it again. There was a major design overhaul, coupled with the fact that I
+actually built a prototype in Figma instead of winging it. This site was built with the following tools:
 
-1. TailwindCSS
-2. Astro
-3. Cloudflare
-4. React
+1. **Astro.** This time, I was ready to take the time to understand the inner workings of the framework and would attempt to utilise it to
+   its fullest potential.
+2. **TailwindCSS.** Although I faced problems down the road for reasons explained later, I found Tailwind to be very fitting and Astro
+   had already shown that they had immense first-class support for it, so I saw no reason to not take advantage of that.
+3. **Cloudflare.** This project is deployed on Cloudflare Pages.
+4. **React.** Astro's 'islands' architecture would support React interchangeably. I saw an opportunity to use this.
 
-## Overcoming problems
+## Using Tailwind
 
-### Tailwind's typography plugin
+Tailwind had already proven itself to be a great boon in my previous projects, making it enjoyable to style HTML. In this project,
+however, things change when it comes to markdown.
 
-Tailwind offers a plugin called <Link href="https://github.com">`@tailwindcss/typography`</Link> specifically for styling rendered
-markdown content. It offers fast and sensible defaults to your project through the use of just 1 class - `prose`.
-This seemed like a perfect addition to my project as I didn't want to style every single element on my own.
+### Typography plugin
+
+Tailwind offers a plugin called [`@tailwindcss/typography`](https://github.com) specifically for styling rendered
+markdown content. It offers fast and sensible defaults through the use of just one class - `prose`.
+This seemed like a perfect addition to my project, as despite the lack of need for markup anymore, I still didn't want
+to _style_ every component on my own!
 
 Unfortunately, Tailwind really shows its ugly side here. Here's a snippet from when I initially used the plugin in this project:
 
 ```astro title='ContentLayout.astro'
 class:list={[
-    // other classes left for brevity
+    // non-tailwind classes left for brevity
     "prose",
     "prose-h1:text-white prose-h1:text-5xl",
     "prose-h2:text-primary prose-h2:text-4xl",
@@ -83,26 +106,86 @@ class:list={[
 ]}
 ```
 
-That's not even all the styling I wanted to apply. Honestly, I didn't expect the level of rigidity here.
-Trying to customise a value just introduced a lot of characters, which were finicky to control through Tailwind anyway.
-If I wanted to remove the default backticks on `code` elements that were part of the plugin,
+That's not even all the styling I wanted to apply! Honestly, I didn't expect the level of rigidity here. Most of the stylings were
+finicky to control through Tailwind, as selectors would get incredibly verbose. After some evaluation, I decided to bite the bullet
+and eventually dropped the library in favour of styling my own components. This actually benefitted me in the long run, as I realised that
+having complete control over what your styles was fun! Who knew, right?
 
-For example, targetting `prose-code` also selected `code` elements inside code blocks, so that was a little annoying. I had to dig into
-Tailwind's arbitrary value formatting and came up with this monstrosity:
+Moral of the story; try it out yourself first, before reaching for a library. I'm not saying to reinvent the wheel every time here -
+Tailwind Typography is great for bunch of default styling that looks decent, but consider the tradeoffs when using a library like this.
 
-```html
-"prose-pre:[code:not()]"
+### Dealing with v4
+
+Just last week, Tailwind released a new major version, v4. This update included a ton of exciting new features, like the CSS Tailwind
+config file _(finally!),_ the `:not()` selector, and the new Oxide engine.
+
+I was keen to try it out, so in the middle of development, I upgraded to v4.
+This was not the brightest idea in hindsight, because initially the new architecture became remarkably _annoying_ to use. I felt myself fighting
+the library at times; _"why did they make it this way,"_ and _"why can't I just do this?"_
+
+But I was proven wrong! v4 is an excellent upgrade to v3 in almost every way, and I just didn't understand the vision at first.
+
+One thing the Tailwind team has always advised against using is the `@apply` rule, which is perplexing. This is made even more prevalent
+in v4, where using `@apply` carelessly would lead to some not-insignificant issues. _But why?_
+
+On the surface, it seems like a convenient way of applying Tailwind styles to custom CSS! Take this example, where we have
+a somewhat complex selector:
+
+```css title="css" {5}
+@reference "tailwindcss";
+
+#alert {
+	&[data-type="info"] pre {
+		@apply bg-slate-900/80 border-l-2 border-l-blue-500;
+	}
+}
 ```
 
-I ended up writing CSS code for my markdown. Honestly, if you're fine with Tailwind's default styling, it's a great library - and it seems
-to be made for that purpose. However, if you want to customise more than a couple stylings, I wouldn't recommend it.
+Consider the equivalent without `@apply` in Tailwind and regular CSS:
 
-### Content Collections
+```astro title="tailwind"
+<aside id="alert" data-type="info" class:list={[
+	"bg-blue-950/40 border-l-4 border-l-blue-300/60",
+	"data-[type='info']:[pre]:bg-slate-900/80",
+	"data-[type='info']:[pre]:border-l-2",
+	"data-[type='info']:[pre]:border-l-blue-500",
+]}>
+```
 
-This site is built with Astro `v5.1.2`. A lot of changes from Astro 3, but most of them didn't affect
-my work. One core feature that stayed around that was necessary to populate my website were _content collections_.
-Content collections are essentially just a set of data, like JSON files or entire blog posts. These are stored locally on the project.
-They're great and all, but I did come to a roadblock with them at one point.
+```css title="css"
+#alert {
+	&[data-type="info"] pre {
+		background-color: --alpha(var(--color-slate-900) / 80%);
+		border-style: var(--tw-border-style);
+		border-width: 2px;
+		border-left-color: var(--color-blue-500);
+	}
+}
+```
+
+Both of these options are far more verbose. So what's wrong with `@apply`, really?
+
+There are a few problems. To understand them, let's talk about the terminology of styles in Astro.
+
+When we use the `<style>` tag in an Astro component, we create a **CSS module**. In these modules, our style is scoped to the existing component,
+which means that if we select `<p>` tags in the component, we only select ones that have been predefined,
+unless we explicitly target `<slot>` elements. The advantage of this is these component styles don't bleed into elsewhere in our app,
+which could unpredictable results. CSS modules are a very common paradigm employed by various app bundlers nowadays.
+
+Unfortunately, Tailwind doesn't play well with them. Firstly, whenever we use `@apply` in a module,
+we need to use `"@reference tailwindcss"` to link up Tailwind. This gives us access to either the default Tailwind styles or our own
+theme. The tradeoff is that this also makes Tailwind run a _separate_ time for every file we use `@reference` on! This is **_terrible_**
+for performance as it makes build times super slow.
+
+So what's the solution? Well, Tailwind recommends just simply making more isolated components with their own Tailwind classes, rather than
+depending on complex selectors. There is a natural inclination towards such a mentality when using libraries/frameworks like
+React/Astro, but sometimes you need that specificity. It takes 
+a bit more consideration when building your components, but it'll be worth the faster load speeds.
+
+## Content Collections
+
+The one core Astro feature that populates my website is _content collections_. They're essentially just a set of data,
+like JSON files or entire blog posts, stored locally on the project.
 
 Normally, how you'd define a collection goes as follows:
 
@@ -128,17 +211,25 @@ const projects = defineCollection({
 `defineCollection` needs 2 props - `loader` & `schema`. `loader` specifies how Astro parses your media, with `glob` being
 file path matching, and `file`, which loads JSON files via an exact path.
 
-`schema` is how you format your markdown. I use MDX (an extension of Markdown), as Astro has first-class support for it, alongside an
-included frontmatter plugin. Astro also exposes a <Link href="https://zod.dev">Zod</Link> object for you to streamline the creation of
+`schema` is how you format your markdown. Astro uses [Zod](https://zod.dev) internally for you to streamline the creation of
 your frontmatter schema and provide generated Typescript types in the project. Pretty neat!
 
-<Alert type="info" title="Heads up!">
-	<Link href="https://docs.astro.build/en/guides/content-collections/#zod-schema-methods">
-		Astro only supports most of Zod's methods.
-	</Link>
+<Alert type="info" title="My thoughts on Zod">
+	[Astro only supports most of Zod's
+	methods](https://docs.astro.build/en/guides/content-collections/#zod-schema-methods). Personally, I
+	don't really like Zod much more than other schema libraries like **Yup** or **Joi**. Instead, I much
+	prefer **Valibot**, mainly because it's a more lightweight and yet more powerful alternative. Zod comes in
+	at an indulgent **12kb** g-zipped, with no tree-shaking due to its API design. I find that a little too
+	hefty for a schema library. [Compare it to Valibot](https://valibot.dev/guides/comparison/), which
+	starts off at **95%** less than that.
+
+    One curious thing to take note of is the [standard schema spec](https://standardschema.dev/), a way for
+    validation libraries to adhere to a common interface. Libraries/frameworks like **react-hook-form** and Astro can implement
+    this to make themselves validator-agnostic. Hopefully Astro will implement this in the future!
+
 </Alert>
 
-For instance, the frontmatter for this project looks like this:
+To demonstrate how the schema works, the frontmatter for this project looks like this:
 
 ```yaml
 ---
@@ -155,11 +246,11 @@ tags:
 ```
 
 Astro verifies the structure of the frontmatter props on every page load. For example, if `name` was omitted, Astro would complain and
-throw an error, and stop rendering the markdown file.
+throw an error, and fail to render the markdown file.
 
 As you've seen above, there are a quite a number of data types that are available for use in the schema. However, there is a special
-type created by Astro that's not natively in Zod - `reference`. It essentially allows you to refer to an entry in another collection via
-its slug.
+type created by Astro that's not natively in Zod - `reference`. It essentially allows you to refer to another collection entry via
+its slug. A collection can even reference itself!
 
 For instance, the `projects` collection references the `tags` and `projects` collections:
 
@@ -182,22 +273,23 @@ const projects = defineCollection({
 });
 ```
 
-This all seems fine. But a peculiar issue came up when I added those 2 types and ran the project again:
+This is the way that it had been working for a while now.
+But a peculiar issue came up one day when I added those 2 types and ran the project:
 
 ```
 Cannot destructure property 'type' of 'lookupMap[collection]' as it is undefined
 ```
 
-That's odd. I was sure that I typed it correctly, as per
-the <Link href="https://docs.astro.build/en/guides/content-collections/#defining-collection-references">docs</Link>. So why wasn't it
+This was odd to me. I was sure that I had typed the schema correctly, as per
+the [docs](https://docs.astro.build/en/guides/content-collections/#defining-collection-references). So why wasn't it
 working?
 
-Turns out, it was a bug on Astro's side. <Link href="https://github.com/withastro/astro/issues/12885">The GitHub issue</Link> itself has since been fixed and closed,
+Turns out, it was a bug on Astro's side. [The GitHub issue](https://github.com/withastro/astro/issues/12885) itself has since been fixed and closed,
 but essentially, a race condition would occur where Astro would try to assign the record to a collection
-without the collection actually existing in the first place. This mismatch causes the project to stop building and fail. It was
-frustrating at first, since I had triple-checked my code.
+without the collection actually existing in the first place. This mismatch causes the project to stop building and fail. This was a very
+frustrating error as it was difficult to pinpoint exactly how it went wrong. It took a lot of research and time for it to get fixed!
 
-I did discover a workaround involving the `.astro` folder. This is what it looks like, with other files omitted for brevity:
+In the meantime, I did discover a workaround involving the `.astro` folder. This is what it looks like, with other files omitted for brevity:
 
 <Filetree
 	files={[
@@ -216,15 +308,15 @@ I did discover a workaround involving the `.astro` folder. This is what it looks
 />
 
 The `collections` folder is where Astro stores the parsed content schemas. I suspected the problem was the definitions themselves,
-so I deleted the folder and regenerated it, which actually fixed the problem. This issue was quickly fixed after opening an issue on
-the GitHub.
+so I deleted the folder and regenerated it, which actually fixed the problem. Not the best solution, but it allowed me to work on other
+things in the project.
 
 ## Creating the layout
 
 If you inspect this page with dev tools, you'll see that I use CSS grid. Initially, I used flexbox to create the layout for the page, but
-it just _didn't seem right_. I was stuck with so much random padding in many places! Using
+it just didn't _feel_ right.
 
-I've prepared a rough demo below. **_If you're on mobile, you may have to switch to a bigger device to see the full layout._**
+I've prepared a rough demo below. **If you're on mobile, you may have to switch to a bigger device to see the full layout.**
 Adjust the slider to change the width of the viewport:
 
 <GridExample />
@@ -241,25 +333,25 @@ horizontal axis of the page. We have two solutions: either use `padding`, or gri
 for reasons I'll explain soon.
 
 To add padding, we insert divs at both ends that are `1fr` in width at the `sm` threshold, while the middle two have their own fixed width.
-`1fr` is a grid-exclusive unit that simply means; **_"fill up the remaining space, but shrink based on the size of the viewport"._**
+`1fr` is a grid-exclusive unit that simply means; **_"occupy the remaining space"._**
 
 We can achieve all these through the use of `grid-template-columns`:
 
-```css title="index.css"
+```css title="css"
 #container {
 	display: grid;
 	grid-template-columns: 1fr 24rem 12rem 1fr;
 }
 ```
 
-```astro title="index.astro"
+```astro title="astro"
 <div
 	id="container"
 	class:list={[
 		"grid-cols-1",
-		"@-xs:grid-cols-[3fr_1fr]",
-		"@-md:grid-cols-[1fr_16rem_8rem_1fr]",
-		"@-[39]:grid-cols-[1fr_24rem_12rem_1fr]",
+		"@xs:grid-cols-[3fr_1fr]",
+		"@md:grid-cols-[1fr_16rem_8rem_1fr]",
+		"@[39rem]:grid-cols-[1fr_24rem_12rem_1fr]",
 		"justify-center relative gap-2"
 	]}
 >
@@ -267,19 +359,12 @@ We can achieve all these through the use of `grid-template-columns`:
 ```
 
 <Alert type="info" title="What does that '@' character do?">
-	Tailwind has a package called
-	<Link href="https://tailwindlabs.com">`@tailwindcss/container-queries`</Link> that allows you to use Tailwind's
-	utilities with the <Link href="https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_containment/Container_queries">
-		CSS Container Query API
-	</Link>. Container queries are extremely useful, and the rundown is that they allow you to style children of
-	a container based on its width! Think of media queries, but for individual elements. Take a read 
-	at <Link href="https://www.joshwcomeau.com/css/container-queries-introduction">Josh Comeau's
-	blog post here</Link>, where he does an amazing job introducing container queries.
-
-    ```ts title="index.ts"
-    console.log("hello world!")
-    ```
-
+	Tailwind v4 adds direct support for the [CSS Container Query
+	API](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_containment/Container_queries) . Container
+	queries are pretty powerful, and the rundown is that they allow you to style children of a container based
+	on its dimensions! Think of media queries, but for individual elements. Take a read at [Josh Comeau's blog
+	post](https://www.joshwcomeau.com/css/container-queries-introduction) where he does an amazing job
+	introducing container queries.
 </Alert>
 
 So why exactly did we choose these boxes over using the reliable `padding` property? It's kind of a personal preference.
@@ -300,32 +385,65 @@ mini interactable sections while still writing plain text.
 ### Islands
 
 Astro introduces the concept of '**_islands_**', which is a relatively new architecture in
-the web dev space. <Link href="https://docs.astro.build/en/concepts/islands/#a-brief-history">Astro's docs explain it best</Link>. To understand it, we first need to elaborate on the concept of **hydration**.
+the web dev space. [Astro's docs explain it best](https://docs.astro.build/en/concepts/islands/#a-brief-history). To understand it,
+we first need to elaborate on the concept of **hydration**.
 
 To put it briefly, hydration means adding JavaScript interactivity to a static page. We defer this process until after the HTML/CSS has finished loading, as JS
 is one of the slowest forms of data to send to the client. This gives the page a 'complete' appearance,
 though in actuality lacks any functionality.
 
 There are different ways to hydrate a web page -
-for example, in SPAs (Single-Page-Apps), hydration is often done all at once, often making page loads speed slow. SPAs are usually
+for example, in SPAs (Single-Page-Apps), hydration is often done all at once, slowing load speed. SPAs are usually
 reserved for web apps that contain a large amount of JS functionality, like dashboards and e-commerce sites.
 
-Astro hydrates pages via islands. These islands also perform hydration, but rather on a component-level basis. This basically means that
-most of the web page remains statically loaded, while only the components that you specify will require JavaScript hydration, keeping
+Astro islands also perform hydration, but rather on a component-level basis. This basically means that
+most of the web page remains static, while only the components that you specify will require JavaScript hydration, keeping
 load times low and the page fast.
 
 There are two types of islands; client and server. For brevity, I'll only cover client islands in this post.
 
 To create a client island, we use the `client:*` directive on a component as follows:
 
-```astro
+```astro frame="none"
 <HelloWorld client:load />
 ```
 
 There are a few `client*` directives available:
 
-1. `client:load`: Load the component only when the page has finished loading other static assets
-2. `client:idle`: Load the component when the browser becomes idle
-3. `client:visible`: Load the component when it enters the viewport
+1. `client:load` - Load the component only when the page has finished loading other static assets
+2. `client:idle` - Load the component when the browser becomes idle
+3. `client:visible` - Load the component when it enters the viewport
 
-This tells Astro
+### Using React
+
+I write these interactive components in React, which I wrap around an Astro component, `<Frame>`. As of now,
+`<Frame>` only provides common stylings and uses the `client:visible` directive,
+but I have plans to make it more composable to allow more interactivity in the future.
+
+<Alert type="info" title="Why not Svelte, or Solid.js?">
+	I chose React as it was the most familiar to me, backed by a solid ecosystem. I also use
+	[motion.dev]("https://motion.dev") as an animation library, which is only available for React and vanilla
+	JS. I admittedly have not tried Svelte or Solid.js in a while, but when I last used them, ecosystem support
+	was quite subpar. It has been a few years, so I could be very wrong now! I may consider looking into them
+	in the future, but as of now I have no plans.
+</Alert>
+
+## Hosting
+
+I'm glad I haven't found a need to opt for full SSR on Astro yet. With islands, this is essentially isn't an issue, and I'm able to
+deploy on Cloudflare Pages for free!. The workflow was pretty easy, to be honest - just connect Cloudflare Pages to a repo and wait for it
+to finish building. I had already set up a `CNAME` record prior to this, so I could just use it straight away. The whole process took something
+like 10 minutes.
+
+Originally, I bought my domain on **Namecheap**. It was relatively inexpensive; I pay 15 SGD a year for it.
+I've since moved it to Cloudflare as it'll be easier to work with in the future.
+
+## Closing words
+
+I've come a long way since writing my first line of Java code in my polytechnic years. This portfolio website is only the beginning to my
+journey as a software developer! There'll be many ups and downs along the way, but they'll all be learning experiences :)
+
+<Alert type="info" title="Extra stuff">
+	There's a lot more I want to talk about in this post, but I think that's enough for now. I'll go over how I
+	made the table of contents in a future blog post!
+</Alert>

@@ -14,11 +14,13 @@ const { src, alt } = Astro.props;
 	<dialog
 		id="modal"
 		open={false}
-		class="h-fit bg-black fixed max-w-6xl backdrop:bg-black/50 backdrop:backdrop-blur-lg rounded-md ring-0 ring-offset-8 ring-offset-gray-900"
+		class="m-auto max-w-6xl backdrop:bg-black/50 backdrop:backdrop-blur-lg rounded-md"
 	>
-		<Image id="enlarged" class="m-0" src={src} alt={alt} />
-		<button class="absolute right-4 top-4 aspect-square grid place-items-center bg-gray-400/40 rounded-xs">
-			<i class="ph ph-x text-2xl text-slate-500"></i>
+		<Image class="relative w-full" src={src} alt={alt} />
+		<button
+			class="p-1 absolute right-4 top-4 aspect-square grid place-items-center frame-border cursor-pointer hover:ring-slate-400"
+		>
+			<i class="ph ph-x text-2xl text-slate-300 pointer-events-none"></i>
 		</button>
 	</dialog>
 	<Image

@@ -36,37 +36,36 @@ const { title, headings } = Astro.props;
 <style is:global>
 	@reference "../../tailwind.css";
 
-	section {
-		@apply my-8;
-
-		& > section {
-			@apply my-12;
-		}
-	}
-
-	p {
-		@apply mb-6 text-pretty tracking-[0.01rem];
-	}
-
 	h1 {
 		@apply text-5xl mb-14;
 	}
 
-	h2,
-	h3 {
-		@apply text-primary scroll-mt-28;
-	}
+	section {
+		@apply my-8 last-of-type:mb-0 not-[section_&]:last-of-type:[&_>_p]:mb-0;
 
-	h2 {
-		@apply mb-8 text-3xl;
-	}
+		& > section {
+			@apply my-12;
+		}
 
-	h3 {
-		@apply my-8 text-xl text-pretty font-bold tracking-[0.2rem] font-display uppercase;
-	}
+		& > p {
+			@apply mb-6 text-pretty tracking-[0.01rem];
+		}
 
-	ol {
-		@apply mb-4 text-white space-y-4 text-base;
+		& > :is(h2, h3) {
+			@apply text-primary scroll-mt-28;
+		}
+
+		& > h2 {
+			@apply mb-8 text-3xl;
+		}
+
+		& > h3 {
+			@apply mt-16 mb-8 text-xl text-pretty font-bold tracking-[0.2rem] font-display uppercase;
+		}
+
+		& > ol {
+			@apply ml-10 mb-12 text-white space-y-4 text-lg;
+		}
 	}
 
 	.expressive-code {
@@ -111,39 +110,6 @@ const { title, headings } = Astro.props;
 		}
 	}
 
-	#alert {
-		& > p {
-			color: var(--color-white);
-			font-family: var(--font-body);
-
-			@apply text-white font-body text-base;
-		}
-
-		& > a {
-			@apply text-base;
-		}
-
-		.expressive-code {
-			@apply -mx-4;
-		}
-
-		&[data-type="info"] .expressive-code .frame.has-title .header {
-			@apply !bg-slate-950/70 !rounded-sm;
-		}
-
-		&[data-type="success"] pre {
-			@apply bg-green-900/20;
-		}
-
-		p {
-			@apply m-0;
-
-			& + p {
-				@apply mb-4;
-			}
-		}
-	}
-
 	code:not(.expressive-code code) {
 		@apply px-1 py-1.5 rounded-sm text-sm bg-gray-800/80 whitespace-nowrap;
 	}
@@ -154,6 +120,7 @@ const { title, headings } = Astro.props;
 </style>
 
 <script>
+	// mark active toc links
 	let observer: IntersectionObserver;
 	const sections = document.querySelectorAll("article section");
 
@@ -169,8 +136,14 @@ const { title, headings } = Astro.props;
 
 					if (!link) return;
 
-					const addRemove = section.intersectionRatio > 0 ? "add" : "remove";
-					link.classList[addRemove]("text-indigo-400");
+					if (section.intersectionRatio > 0) {
+						link.classList.replace("text-gray-600", "text-indigo-400");
+						link.classList.replace("hover:text-gray-400", "hover:text-indigo-300");
+						continue;
+					}
+
+					link.classList.replace("text-indigo-400", "text-gray-600");
+					link.classList.replace("hover:text-indigo-300", "hover:text-gray-400");
 				}
 		});
 

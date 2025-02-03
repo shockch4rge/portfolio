@@ -42,5 +42,13 @@
 	{
 		"id": "cloudflare",
 		"iconUrl": "https://svgl.app/library/cloudflare.svg"
+	},
+	{
+		"id": "react",
+		"iconUrl": "https://svgl.app/library/react_dark.svg"
+	},
+	{
+		"id": "motion",
+		"iconUrl": "https://svgl.app/library/motion_dark.svg"
 	}
 ]

@@ -11,19 +11,20 @@ const { type, title } = Astro.props;
 	id="alert"
 	data-type={type}
 	class:list={[
-		"[&>p]:text-white",
+		"[&_p]:not-last:mb-4 [&_p]:text-white [&_p]:font-body [&_p]:text-base",
+		"[&_a,p]:text-base",
 		"-mx-8 mt-8 mb-12 px-7 py-6 rounded-xs not-prose relative",
 		{
-			"bg-blue-950/40 border-l-4 border-blue-400/50": type === "info",
-			"bg-green-950/40 border-l-4 border-green-400/50": type === "success",
-			"bg-yellow-950/40 border-l-4 border-yellow-400/50": type === "warning",
-			"bg-red-950/40 border-l-4 border-red-400/50": type === "error",
+			"bg-blue-950/40 border-l-4 border-l-blue-300/60": type === "info",
+			"bg-green-950/40 border-l-4 border-l-green-300/60": type === "success",
+			"bg-yellow-900/20 border-l-4 border-l-yellow-300/60": type === "warning",
+			"bg-red-900/20 border-l-4 border-l-red-400/60": type === "error",
 		},
 	]}
 >
 	<h4
 		class:list={[
-			"mb-2 text-lg font-bold font-body",
+			"mb-4 text-lg font-bold font-body",
 			{
 				"text-blue-400": type === "info",
 				"text-green-400": type === "success",
@@ -40,34 +41,25 @@ const { type, title } = Astro.props;
 <style is:global>
 	@reference "../../../tailwind.css";
 
-	aside {
-		& > p {
-			color: var(--color-white);
-			font-family: var(--font-body);
-
-			@apply text-white font-body text-base;
-		}
-
-		& > a {
-			@apply text-base;
-		}
-	}
-
 	#alert {
 		&[data-type="info"] pre {
-			@apply bg-slate-900/80;
+			@apply bg-slate-900/80 border-2 border-l-blue-500;
 		}
 
 		&[data-type="success"] pre {
 			@apply bg-green-900/20;
 		}
 
-		p {
-			@apply m-0;
+		.expressive-code {
+			@apply -mx-4;
+		}
 
-			& + p {
-				@apply mb-4;
-			}
+		&[data-type="info"] .expressive-code .frame.has-title .header {
+			@apply !bg-slate-950/70 !rounded-sm;
+		}
+
+		&[data-type="success"] pre {
+			@apply bg-green-900/20;
 		}
 	}
 </style>
