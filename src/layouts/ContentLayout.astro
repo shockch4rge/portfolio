@@ -41,7 +41,7 @@ const { title, headings } = Astro.props;
 	}
 
 	section {
-		@apply my-8;
+		@apply my-8 last-of-type:mb-0 not-[section_&]:last-of-type:[&_>_p]:mb-0;
 
 		& > section {
 			@apply my-12;
