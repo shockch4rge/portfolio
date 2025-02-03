@@ -41,7 +41,7 @@ const { title } = Astro.props;
 		<main>
 			<slot transition:animate={fade({ duration: "0.4s" })} />
 		</main>
-		<Glow class="fixed -top-40 -left-24 select-none pointer-events-none z-0" />
+		<Glow class="fixed -top-40 -left-24 select-none pointer-events-none z-0 opacity-75" />
 		<Footer />
 	</body>
 </html>
