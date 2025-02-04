@@ -73,13 +73,13 @@ const toc = buildToc(headings);
 	}
 </style>
 
-<script>
+<script is:inline>
 	// mark active toc links
 	const sections = document.querySelectorAll("article section");
 
 	const observer = new IntersectionObserver(s => {
 		for (const section of s) {
-			const heading = section.target.querySelector("h2, h3")!;
+			const heading = section.target.querySelector("h2, h3");
 			const id = heading.getAttribute("id");
 			const link = document.querySelector(`article #toc li a[href="#${id}"]`);
 
