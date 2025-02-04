@@ -118,39 +118,3 @@ const { title, headings } = Astro.props;
 		@apply text-xs;
 	}
 </style>
-
-<script>
-	// mark active toc links
-	let observer: IntersectionObserver;
-	const sections = document.querySelectorAll("article section");
-
-	const observe = () => {
-		if (observer) observer.disconnect();
-
-		observer = new IntersectionObserver(sections => {
-			if (observer)
-				for (const section of sections) {
-					const heading = section.target.querySelector("h2, h3")!;
-					const id = heading.getAttribute("id");
-					const link = document.querySelector(`article #toc li a[href="#${id}"]`);
-
-					if (!link) return;
-
-					if (section.intersectionRatio > 0) {
-						link.classList.replace("text-gray-600", "text-indigo-400");
-						link.classList.replace("hover:text-gray-400", "hover:text-indigo-300");
-						continue;
-					}
-
-					link.classList.replace("text-indigo-400", "text-gray-600");
-					link.classList.replace("hover:text-indigo-300", "hover:text-gray-400");
-				}
-		});
-
-		for (const section of sections) {
-			observer.observe(section);
-		}
-	};
-
-	observe();
-</script>
