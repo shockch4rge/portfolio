@@ -15,7 +15,8 @@
 	--animate-carousel: slide 10s linear infinite;
 	--animate-fade-in: fade-in 0.2s ease-in-out;
 
-	--cube-in: cubic-bezier(0.18, 0.89, 0.23, 1);
+	--ease-in-cubic: cubic-bezier(0.18, 0.89, 0.23, 1);
+	--ease-in-jerk: cubic-bezier(0.14, -0.53, 0, 1);
 
 	@keyframes slide {
 		from {
@@ -32,8 +33,6 @@
 		to {
 			opacity: 1;
 		}
-	}
-	@keyframes cube-in {
 	}
 }
 
@@ -145,8 +144,10 @@
 
 	ol {
 		list-style: decimal;
-		list-style-position: inside;
+		list-style-position: outside;
+
 		::marker {
+			font-family: var(--font-display);
 			color: var(--color-indigo-400);
 		}
 	}
@@ -180,6 +181,7 @@
 	--tw-ring-color: var(--color-slate-700);
 	--tw-ring-offset-width: 2px;
 	--tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+	--tw-inset-shadow-color: color-mix(in oklab, var(--color-white));
 
 	box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow),
 		var(--tw-ring-shadow), var(--tw-shadow);
@@ -189,5 +191,35 @@
 		border-radius: var(--radius-md);
 	}
 
-	@apply border-2 border-gray-600 ring-2 ring-slate-800 ring-offset-2 ring-offset-slate-900 bg-black/20 sm:rounded-md;
+	@apply border-2 border-gray-600 ring-2 ring-slate-800 ring-offset-2 ring-offset-slate-900 bg-black/20 sm:rounded-md inset-shadow-sm inset-shadow-white/20;
+}
+
+@custom-variant cb {
+	.expressive-code {
+		@slot !important;
+	}
+}
+
+@custom-variant cbf {
+	.expressive-code .frame {
+		@slot !important;
+	}
+}
+
+@custom-variant cbp {
+	.expressive-code .frame pre {
+		@slot !important;
+	}
+}
+
+@custom-variant cbt {
+	.expressive-code .frame .has-title .title {
+		@slot !important;
+	}
+}
+
+@custom-variant cbh {
+	.expressive-code .frame .has-title .header {
+		@slot !important;
+	}
 }

@@ -57,7 +57,7 @@ const toc = buildToc(headings);
 		animation-name: animateIn;
 		animation-duration: 1.4s;
 		animation-fill-mode: forwards;
-		animation-timing-function: var(--cube-in);
+		animation-timing-function: var(--ease-in-cubic);
 	}
 
 	@keyframes animateIn {
@@ -72,3 +72,31 @@ const toc = buildToc(headings);
 		}
 	}
 </style>
+
+<script is:inline>
+	// mark active toc links
+	const sections = document.querySelectorAll("article section");
+
+	const observer = new IntersectionObserver(s => {
+		for (const section of s) {
+			const heading = section.target.querySelector("h2, h3");
+			const id = heading.getAttribute("id");
+			const link = document.querySelector(`article #toc li a[href="#${id}"]`);
+
+			if (!link) return;
+
+			if (section.intersectionRatio > 0) {
+				link.classList.replace("text-gray-600", "text-indigo-400");
+				link.classList.replace("hover:text-gray-400", "hover:text-indigo-300");
+				continue;
+			}
+
+			link.classList.replace("text-indigo-400", "text-gray-600");
+			link.classList.replace("hover:text-indigo-300", "hover:text-gray-400");
+		}
+	});
+
+	for (const section of sections) {
+		observer.observe(section);
+	}
+</script>

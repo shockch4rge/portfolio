@@ -4,25 +4,25 @@ const linkIcons = [
 		className: "fa-brands fa-github",
 		name: "GitHub",
 		url: "https://github.com/shockch4rge",
-		label: "leave page to my GitHub",
+		label: "GitHub",
 	},
 	{
 		className: "fa-brands fa-bluesky",
 		name: "Bluesky",
 		url: "https://bsky.app/profile/favteo.bsky.social",
-		label: "leave page to my Bluesky",
+		label: "Bluesky",
 	},
 	{
 		className: "fa-brands fa-linkedin",
 		name: "Linkedin",
 		url: "https://linkedin.com/favian-teo-eu-kiat",
-		label: "leave page to my Linkedin",
+		label: "Linkedin",
 	},
 ];
 ---
 
 <footer
-	class="mt-auto py-24 px-12 md:px-24 lg:px-32 2lg:px-36 xl:px-40 grid grid-cols-5 text-white bg-secondary/40 z-30 relative"
+	class="mt-24 py-24 px-12 md:px-24 lg:px-32 2lg:px-36 xl:px-40 grid grid-cols-5 text-white bg-secondary/40 z-30 relative"
 >
 	<!-- <div>
 		<label for="newsletter">
@@ -57,7 +57,7 @@ const linkIcons = [
 			{
 				linkIcons.map(l => (
 					<a href={l.url}>
-						<i class:list={[l.className, "text-3xl w-8 h-8"]}>{l.label}</i>
+						<i class:list={[l.className, "w-8 h-8 text-3xl font-body"]}>{l.label}</i>
 					</a>
 				))
 			}

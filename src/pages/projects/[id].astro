@@ -25,7 +25,7 @@ const {
 	<ContentLayout title={name} headings={headings} tags={tags}>
 		<h1>{name}</h1>
 		<div class="mb-6 font-display font-medium text-gray-600">
-			Published on {new Date(pubDate).toLocaleDateString()}
+			Published on {new Date(pubDate).toLocaleDateString("en-sg")}
 		</div>
 		<Tags data={tags ?? []} />
 		<Content />
