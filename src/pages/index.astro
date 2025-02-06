@@ -2,39 +2,13 @@
 import Container from "@components/Container.astro";
 import TextCarousel from "@components/TextCarousel.astro";
 import BaseLayout from "@layouts/BaseLayout.astro";
-import Timeline from "@components/Timeline.astro";
-import { Image } from "astro:assets";
-import GowRagnarok from "@assets/gow_ragnarok.png";
-import Minecraft from "@assets/minecraft.png";
-import SgFlag from "@assets/sg_flag.png";
-
-const timelineData = [
-	{
-		date: "2016",
-		title: "Inspect Element",
-		description: "Lorem Ipsum",
-	},
-	{
-		date: "2018",
-		title: "Polytechnic",
-		description: "Lorem Ipsum",
-	},
-	{
-		date: "2020",
-		title: "National Service",
-		description: "Lorem Ipsum",
-	},
-	{
-		date: "2022",
-		title: "Future",
-		description: "Lorem Ipsum",
-	},
-];
 ---
 
 <BaseLayout title="Portfolio">
 	<Container center className="h-screen mt-[-5rem]">
-		<h1 class="w-full text-[2.5rem] md:text-7xl text-primary text-start font-body font-extrabold">
+		<h1
+			class="w-full text-[2.5rem] md:text-6xl lg:text-7xl text-primary text-start font-body font-extrabold"
+		>
 			Hey. I'm&nbsp;Favian,
 		</h1>
 		<TextCarousel />
@@ -48,7 +22,7 @@ const timelineData = [
 			}
 		</div>
 	</Container>
-	<section class="grid mx-72 my-24 items-center gap-4">
+	<section class="grid mx-8 sm:mx-32 lg:mx-52 my-24 items-center justify-center gap-4">
 		<h1 class="my-8">About Me</h1>
 		<p>
 			<span class="font-bold italic">Inspect Element.</span> As a secondary school student bored in the computer
