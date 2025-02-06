@@ -13,13 +13,7 @@ import BaseLayout from "@layouts/BaseLayout.astro";
 		</h1>
 		<TextCarousel />
 		<div class="flex flex-col absolute bottom-8 -space-y-6">
-			{
-				Array(2)
-					.fill(0)
-					.map((_, i) => (
-						<i class={`fa fa-chevron-down block text-slate-700 text-4xl animate-pulse`} />
-					))
-			}
+			<i class={`fa-solid fa-chevron-down block text-slate-700 text-4xl animate-pulse`}></i>
 		</div>
 	</Container>
 	<section class="grid mx-8 sm:mx-32 lg:mx-52 my-24 items-center justify-center gap-4">
