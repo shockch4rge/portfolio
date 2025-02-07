@@ -1,23 +1,26 @@
 ---
-import Container from "@components/Container.astro";
 import TextCarousel from "@components/TextCarousel.astro";
 import BaseLayout from "@layouts/BaseLayout.astro";
 ---
 
 <BaseLayout title="Portfolio">
-	<Container center className="h-screen mt-[-5rem]">
-		<h1
-			class="w-full text-[2.5rem] md:text-6xl lg:text-7xl text-primary text-start font-body font-extrabold"
-		>
-			Hey. I'm&nbsp;Favian,
-		</h1>
-		<TextCarousel />
-		<div class="flex flex-col absolute bottom-8 -space-y-6">
+	<section class="container hero justify-center place-items-center">
+		<div class="w-full">
+			<h1
+				class="text-[2.5rem] sm:text-5xl md:text-6xl lg:text-7xl text-primary text-start font-body font-extrabold"
+			>
+				Hey. I'm&nbsp;Favian,
+			</h1>
+			<TextCarousel />
+		</div>
+		<div class="self-center absolute bottom-8 -space-y-6">
 			<i class={`fa-solid fa-chevron-down block text-slate-700 text-4xl animate-pulse`}></i>
 		</div>
-	</Container>
-	<section class="grid mx-8 sm:mx-32 lg:mx-52 my-24 items-center justify-center gap-4">
-		<h1 class="my-8">About Me</h1>
+	</section>
+	<section
+		class="container lg:grid-cols-[1fr_65ch_1fr] xl:grid-cols-[1fr_76ch_1fr] place-items-center my-24 gap-y-8"
+	>
+		<h1 class="mt-8 mb-4 place-self-start">About Me</h1>
 		<p>
 			<span class="font-bold italic">Inspect Element.</span> As a secondary school student bored in the computer
 			lab, I was fidgeting around a website and came across an option named 'Inspect Element'. Curious, I
