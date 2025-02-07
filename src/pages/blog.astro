@@ -1,5 +1,32 @@
 ---
-import Wip from "./wip.astro";
+import ProjectCard from "@components/ProjectCard.astro";
+import BaseLayout from "@layouts/BaseLayout.astro";
+import { getBlogPosts, getProjects } from "../content.config";
+import BlogCard from "@components/BlogCard.astro";
+
+const posts = await getBlogPosts();
+
+const hasPosts = posts.length > 0;
 ---
 
-<Wip />
+<BaseLayout title="Projects">
+	<div class="container hero auto-rows-min">
+		<h1 class="mt-36 mb-24 self-start h-fit">blog.</h1>
+		{
+			hasPosts && (
+				<ul class="w-full px-1 py-2 grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-10 lg:gap-10">
+					{posts
+						.sort((a, b) => a.data.pubDate.getTime() - b.data.pubDate.getTime())
+						.map(({ id, data }, i) => (
+							<BlogCard index={i} post={{ id, ...data }} />
+						))}
+				</ul>
+			)
+		}
+		{
+			!hasPosts && (
+				<h2 class="mt-24 w-full flex flex-col space-y-6 text-white text-4xl">Check back soon...</h2>
+			)
+		}
+	</div>
+</BaseLayout>
