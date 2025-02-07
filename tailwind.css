@@ -1,12 +1,18 @@
 @import "tailwindcss";
 
 @theme {
+	--color-zinc-*: initial;
+	--color-neutral-*: initial;
+	--color-stone-*: initial;
+	--color-fuchsia-*: initial;
+	--color-rose-*: initial;
+	--color-lime-*: initial;
+
 	--font-*: initial;
 	--font-display: "JetBrains Mono", monospace;
 	--font-body: "Satoshi Variable", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
 		"Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 
-	--breakpoint-xxs: 400px;
 	--breakpoint-2lg: 1160px;
 
 	--color-primary: #ffe292;
@@ -26,6 +32,7 @@
 			transform: translateX(calc(-120% - 1.5rem));
 		}
 	}
+
 	@keyframes fade-in {
 		from {
 			opacity: 0;
@@ -124,12 +131,7 @@
 	}
 
 	p {
-		color: var(--color-white);
-		font-size: var(--text-lg);
-		line-height: var(--leading-relaxed);
-		max-width: 65ch;
-
-		/* @apply text-white text-lg leading-relaxed max-w-prose; */
+		@apply text-white text-lg leading-relaxed;
 	}
 
 	summary {
@@ -170,9 +172,11 @@
 }
 
 @utility container {
-	@media (width >= theme(--breakpoint-lg)) {
-		padding-inline: 16rem;
-	}
+	@apply min-w-full grid grid-cols-1 px-8 sm:px-24 lg:grid-cols-[1fr_minmax(65ch,var(--container-4xl))_1fr] 2xl:grid-cols-[1fr_var(--container-5xl)_1fr] *:lg:col-start-2 auto-cols-min overflow-x-hidden;
+}
+
+@utility hero {
+	@apply h-screen -mt-20;
 }
 
 @utility frame-border {
