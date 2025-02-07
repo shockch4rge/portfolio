@@ -1,12 +1,18 @@
 @import "tailwindcss";
 
 @theme {
+	--color-zinc-*: initial;
+	--color-neutral-*: initial;
+	--color-stone-*: initial;
+	--color-fuchsia-*: initial;
+	--color-rose-*: initial;
+	--color-lime-*: initial;
+
 	--font-*: initial;
 	--font-display: "JetBrains Mono", monospace;
 	--font-body: "Satoshi Variable", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
 		"Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 
-	--breakpoint-xxs: 400px;
 	--breakpoint-2lg: 1160px;
 
 	--color-primary: #ffe292;
@@ -26,6 +32,7 @@
 			transform: translateX(calc(-120% - 1.5rem));
 		}
 	}
+
 	@keyframes fade-in {
 		from {
 			opacity: 0;
@@ -45,12 +52,11 @@
 
 	body {
 		::selection {
-			background: var(--color-white);
-			color: var(--color-secondary);
+			@apply bg-white text-secondary;
 		}
 
 		:focus-within {
-			outline-color: var(--color-white);
+			@apply outline-white;
 		}
 
 		scrollbar-gutter: stable;
@@ -74,7 +80,7 @@
 	h2,
 	p,
 	label {
-		font-family: var(--font-body);
+		@apply font-body;
 	}
 
 	h3,
@@ -82,54 +88,27 @@
 	h5,
 	h6,
 	button {
-		font-family: var(--font-display);
+		@apply font-display;
 	}
 
 	h1 {
-		color: var(--color-white);
-		font-size: var(--text-4xl);
-		line-height: var(--tw-leading, var(--text-4xl--line-height));
-		font-weight: var(--font-weight-bold);
-
-		@media (width >= theme(--breakpoint-lg)) {
-			font-size: var(--text-5xl);
-			line-height: var(--tw-leading, var(--text-5xl--line-height));
-			font-weight: var(--font-weight-bold);
-		}
-
-		/* @apply text-white text-4xl lg:text-5xl font-bold font-body; */
+		@apply text-white text-4xl lg:text-5xl font-bold;
 	}
 
 	h2 {
-		color: var(--color-white);
-		font-size: var(--text-3xl);
-		line-height: var(--tw-leading, var(--text-3xl--line-height));
-		font-weight: var(--font-weight-bold);
-
-		/* @apply text-white text-3xl font-bold; */
+		@apply text-white text-3xl font-bold;
 	}
 
 	h3 {
-		color: var(--color-primary);
-		font-size: var(--text-xl);
-		line-height: var(--tw-leading, var(--text-xl--line-height));
-		font-weight: var(--font-weight-semibold);
-
-		/* @apply text-primary text-xl font-semibold tracking-[0.25rem]; */
+		@apply text-primary text-xl font-semibold tracking-[0.25rem];
 	}
 
 	h4 {
-		color: var(--color-white);
-		font-size: var(--text-xl);
+		@apply text-xl text-white;
 	}
 
 	p {
-		color: var(--color-white);
-		font-size: var(--text-lg);
-		line-height: var(--leading-relaxed);
-		max-width: 65ch;
-
-		/* @apply text-white text-lg leading-relaxed max-w-prose; */
+		@apply text-white text-lg leading-relaxed;
 	}
 
 	summary {
@@ -143,12 +122,10 @@
 	}
 
 	ol {
-		list-style: decimal;
-		list-style-position: outside;
+		@apply list-decimal list-outside;
 
 		::marker {
-			font-family: var(--font-display);
-			color: var(--color-indigo-400);
+			@apply font-display text-indigo-400;
 		}
 	}
 
@@ -170,27 +147,14 @@
 }
 
 @utility container {
-	@media (width >= theme(--breakpoint-lg)) {
-		padding-inline: 16rem;
-	}
+	@apply min-w-full grid grid-cols-1 px-8 sm:px-24 lg:grid-cols-[1fr_minmax(65ch,var(--container-4xl))_1fr] 2xl:grid-cols-[1fr_var(--container-5xl)_1fr] *:lg:col-start-2 auto-cols-min overflow-x-hidden;
+}
+
+@utility hero {
+	@apply h-screen -mt-20;
 }
 
 @utility frame-border {
-	border: 2px var(--tw-border-style) var(--color-gray-600);
-
-	--tw-ring-color: var(--color-slate-700);
-	--tw-ring-offset-width: 2px;
-	--tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
-	--tw-inset-shadow-color: color-mix(in oklab, var(--color-white));
-
-	box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow),
-		var(--tw-ring-shadow), var(--tw-shadow);
-	background-color: color-mix(in oklab, var(--color-black) 20%, transparent);
-
-	@media (width >= theme(--breakpoint-sm)) {
-		border-radius: var(--radius-md);
-	}
-
 	@apply border-2 border-gray-600 ring-2 ring-slate-800 ring-offset-2 ring-offset-slate-900 bg-black/20 sm:rounded-md inset-shadow-sm inset-shadow-white/20;
 }
 

@@ -1,5 +1,4 @@
 ---
-import Container from "@components/Container.astro";
 import ProjectCard from "@components/ProjectCard.astro";
 import BaseLayout from "@layouts/BaseLayout.astro";
 import { getProjects } from "../content.config";
@@ -10,11 +9,11 @@ const hasProjects = projects.length > 0;
 ---
 
 <BaseLayout title="Projects">
-	<Container className="mt-12">
-		<h1 class="mt-4 mb-24 self-start">projects.</h1>
+	<div class="container hero auto-rows-min">
+		<h1 class="mt-36 mb-24 self-start h-fit">projects.</h1>
 		{
 			hasProjects && (
-				<ul class="w-full px-1 py-2 grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-10">
+				<ul class="w-full px-1 py-2 grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-10 lg:gap-10">
 					{projects
 						.sort((a, b) => a.data.pubDate.getTime() - b.data.pubDate.getTime())
 						.map(({ id, data }, i) => (
@@ -28,5 +27,5 @@ const hasProjects = projects.length > 0;
 				<h2 class="mt-24 w-full flex flex-col space-y-6 text-white text-4xl">Check back soon...</h2>
 			)
 		}
-	</Container>
+	</div>
 </BaseLayout>
