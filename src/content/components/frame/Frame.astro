@@ -1,9 +1,16 @@
 ---
+interface Props {
+	noPadding?: boolean;
+}
 
+const { noPadding = true } = Astro.props;
 ---
 
 <div
-	class="mt-8 mb-12 -mx-8 sm:-mx-12 p-4 frame-border flex flex-col items-center justify-center overflow-hidden"
+	class:list={[
+		"mt-8 mb-12 -mx-8 sm:-mx-12 frame-border flex flex-col items-center justify-center overflow-hidden",
+		noPadding ? "p-0" : "p-4",
+	]}
 >
 	<slot />
 </div>
