@@ -6,9 +6,6 @@ import mdx from "@astrojs/mdx";
 import remarkToc from "remark-toc";
 
 import expressiveCode from "astro-expressive-code";
-import { pluginCollapsibleSections } from "@expressive-code/plugin-collapsible-sections";
-import ecTwoSlash from "expressive-code-twoslash";
-import { pluginCodeCaption } from "@fujocoded/expressive-code-caption";
 import tailwindcss from "@tailwindcss/vite";
 
 import react from "@astrojs/react";
@@ -19,10 +16,7 @@ export default defineConfig({
 		plugins: [tailwindcss()],
 	},
 	integrations: [
-		expressiveCode({
-			plugins: [pluginCollapsibleSections(), pluginCodeCaption(), ecTwoSlash()],
-			themes: ["github-dark-default"],
-		}),
+		expressiveCode(),
 		mdx({
 			remarkPlugins: [remarkSectionize],
 		}),
