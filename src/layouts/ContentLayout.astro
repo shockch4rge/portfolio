@@ -72,47 +72,43 @@ const { title, headings } = Astro.props;
 	.expressive-code {
 		@apply -mx-8 mt-8 mb-12 frame-border;
 
-		.frame {
-			@apply !border-none;
+		figure.frame {
+			@apply border-none;
 
-			pre {
-				@apply !rounded-none !border-0 !border-none !bg-black/20;
-			}
-		}
-
-		:not(.has-title) {
-			pre {
-				@apply sm:!rounded-md;
-			}
-		}
-
-		.has-title {
-			overflow: hidden;
-
-			pre {
-				@apply sm:!rounded-b-md;
+			& > pre {
+				@apply p-2 rounded-none sm:rounded-md border-0 border-none bg-black/20;
 			}
 
-			.header {
-				/* bg is a linear gradient for some reason */
-				background: none !important;
-				@apply !bg-gray-950 !rounded-none sm:!rounded-t-md;
+			&.has-title {
+				overflow: hidden;
 
-				&::before {
-					@apply !border-none;
+				& > pre {
+					@apply sm:rounded-b-md;
 				}
-			}
 
-			.title {
-				&::after {
-					@apply !border-none;
+				figcaption.header {
+					/* bg is a linear gradient for some reason */
+					background: none !important;
+					@apply bg-gray-950 rounded-none sm:rounded-t-md;
+
+					&::before {
+						@apply border-none!;
+					}
+
+					& > span.title {
+						@apply rounded-none sm:rounded-t-sm;
+						
+						&::after {
+							@apply border-none;
+						}
+					}
 				}
 			}
 		}
 	}
 
 	code:not(.expressive-code code) {
-		@apply px-1 py-1.5 rounded-sm text-sm bg-gray-800/80 whitespace-nowrap;
+		@apply p-1 rounded-sm text-sm bg-gray-800/80 whitespace-nowrap;
 	}
 
 	figcaption code {
