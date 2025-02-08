@@ -91,6 +91,10 @@
 		@apply font-display;
 	}
 
+	button {
+		@apply cursor-pointer disabled:cursor-not-allowed;
+	}
+
 	h1 {
 		@apply text-white text-4xl lg:text-5xl font-bold;
 	}
@@ -127,6 +131,10 @@
 		::marker {
 			@apply font-display text-indigo-400;
 		}
+	}
+
+	code {
+		@apply font-display!;
 	}
 
 	/*
