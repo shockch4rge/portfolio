@@ -1,14 +1,17 @@
 import { AnimatePresence, motion } from "motion/react";
 import { useState } from "react";
+import { cn } from "src/util/cn";
 
 import type { ComponentProps, JSX } from "react";
-type Props = ComponentProps<"div"> & Record<`step-${string}`, JSX.Element>;
+type Props = ComponentProps<"div"> &
+	Record<`step-${string}`, JSX.Element> & {
+		maxSteps: number;
+	};
 
 type Direction = -1 | 1;
 
-export const AddDemo: React.FC<Props> = props => {
+export const AddDemo: React.FC<Props> = ({ maxSteps, ...props }) => {
 	const [[step, direction], setStep] = useState<[number, Direction]>([0, 1]);
-	const maxSteps = 5;
 
 	const variants = {
 		enter: (direction: Direction) => ({
@@ -71,7 +74,14 @@ export const AddDemo: React.FC<Props> = props => {
 					type="button"
 					disabled={step === 0}
 					onClick={() => paginate(-1)}
-					className="p-2 flex justify-center items-center border-2 border-slate-700 disabled:border-slate-800 not-disabled:active:scale-95 bg-gray-900 hover:bg-slate-700 disabled:bg-transparent text-gray-400 disabled:text-gray-600 text-xl rounded-full transition-colors"
+					className={cn(
+						"p-2 flex justify-center items-center",
+						"border-2 border-slate-700 disabled:border-slate-800",
+						"not-disabled:active:scale-95 not-disabled:hover:scale-105",
+						"bg-gray-900 hover:bg-slate-700 disabled:bg-transparent",
+						"text-gray-400 disabled:text-gray-600 text-xl",
+						"rounded-full transition"
+					)}
 				>
 					<i className="ph-bold ph-caret-left">previous</i>
 				</button>
@@ -80,12 +90,19 @@ export const AddDemo: React.FC<Props> = props => {
 					type="button"
 					disabled={step === maxSteps - 1}
 					onClick={() => paginate(1)}
-					className="p-2 flex justify-center items-center border-2 border-slate-700 disabled:border-slate-800 not-disabled:active:scale-95 bg-gray-900 hover:bg-slate-700 disabled:bg-transparent text-gray-400 disabled:text-gray-600 text-xl rounded-full transition-colors"
+					className={cn(
+						"p-2 flex justify-center items-center",
+						"border-2 border-slate-700 disabled:border-slate-800",
+						"not-disabled:active:scale-95 not-disabled:hover:scale-105",
+						"bg-gray-900 hover:bg-slate-700 disabled:bg-transparent",
+						"text-gray-400 disabled:text-gray-600 text-xl",
+						"rounded-full transition"
+					)}
 				>
 					<i className="ph-bold ph-caret-right">next</i>
 				</button>
 			</div>
-			<div className="min-h-80 relative">
+			<div className="min-h-96 relative">
 				<AnimatePresence initial={false} custom={direction}>
 					{steps.map(
 						(s, i) =>
