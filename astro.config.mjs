@@ -9,6 +9,7 @@ import expressiveCode from "astro-expressive-code";
 import tailwindcss from "@tailwindcss/vite";
 
 import react from "@astrojs/react";
+import remarkLastUpdatedTime from "./src/util/plugins/last-updated-time.mjs";
 
 // https://astro.build/config
 export default defineConfig({
@@ -18,7 +19,7 @@ export default defineConfig({
 	integrations: [
 		expressiveCode(),
 		mdx({
-			remarkPlugins: [remarkSectionize],
+			remarkPlugins: [remarkSectionize, remarkLastUpdatedTime],
 		}),
 		react(),
 	],
