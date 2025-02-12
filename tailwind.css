@@ -144,6 +144,10 @@
 		::marker {
 			@apply font-display text-indigo-400;
 		}
+
+		& > li {
+			@apply text-white font-body;
+		}
 	}
 
 	code {
