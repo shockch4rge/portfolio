@@ -5,10 +5,13 @@ import Logo from "@assets/logo.svg";
 
 <header
 	class:list={[
-		"h-20 px-8 sm:px-24 xl:px-52 flex justify-between sticky top-0 z-50 overflow-hidden",
+		"h-20 grid sticky top-0 z-50 overflow-hidden",
+		"grid-cols-1 px-8 sm:px-20 md:px-0",
+		"md:grid-cols-[1fr_var(--content-container-md)_1fr] lg:grid-cols-[1fr_var(--content-container-lg)_1fr]",
+		"xl:grid-cols-[1fr_var(--content-container-xl)_1fr] 2xl:grid-cols-[1fr_var(--content-container-2xl)_1fr]",
 	]}
 >
-	<nav class="peer w-full flex justify-between items-center z-50">
+	<nav class="peer md:col-start-2 flex justify-between items-center z-50">
 		<a href="/" aria-label="return to home page">
 			<Logo class="w-16 md:w-18 h-16 md:h-18" aria-label="logo, spells out f-a-v-i, period" />
 		</a>
@@ -28,15 +31,14 @@ import Logo from "@assets/logo.svg";
 	</nav>
 
 	<nav
-		class="nav-links w-full h-screen p-24 hidden peer-has-checked:flex flex-col space-y-4 bg-secondary absolute -left-full peer-has-checked:translate-x-full duration-300 ease-in-out transition-transform"
+		class="nav-links col-span-3 min-h-screen p-24 hidden peer-has-checked:flex flex-col space-y-4 bg-secondary fixed inset-x-0"
 	>
 		<NavLink href="/about">ABOUT ME</NavLink>
 		<NavLink href="/blog">BLOG</NavLink>
 		<NavLink href="/projects">PROJECTS</NavLink>
 		<NavLink href="/contact">CONTACT</NavLink>
 	</nav>
-	<div class="backdrop-edge"></div>
-	<div class="backdrop"></div>
+	<div class="backdrop -mx-20 col-span-full"></div>
 </header>
 
 <script>
