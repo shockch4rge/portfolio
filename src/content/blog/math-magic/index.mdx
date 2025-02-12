@@ -1,0 +1,457 @@
+---
+title: "Math Magic with TypeScript Types"
+description: "Did you know that TypeScript's type system is actually Turing-complete? In this post, we'll learn how to do perform math at compile time."
+pubDate: "2025-02-20"
+draft: false
+tags:
+    - "typescript"
+---
+
+import Link from "@content/components/Link.astro";
+import Alert from "@content/components/Alert.astro";
+import AddDemo from "./components/add-demo/index.astro";
+import FibDemo from "./components/fibonacci-demo/index.astro";
+
+export const components = { a: Link };
+
+For me, one of the killer features that makes TypeScript alluring is its structural type system.
+Other languages like Java, Flutter, and Go opt for a nominal type system which brings about its many benefits,
+but there some things that are simply **impossible** in other languages whose names do not begin with _'Type'_ and end with _'Script'_.
+I'll show you how you can perform arithmetic with types in the most literal of senses. This will be an exciting read!
+
+## Basic arithmetic
+
+So obviously, TypeScript has an arithmetic system:
+
+```ts
+const add = (a: number, b: number) {
+    return a + b;
+}
+
+add(1, 2) // 3
+```
+
+Duh, this isn't exciting at all. Luckily, we're not interested in how to add `1 + 2`. Let's peel back more layers.
+
+## Numerical types
+
+Can you guess the types of these variables? Hover over each definition to reveal their answers:
+
+```ts twoslash
+let num1 = 10;
+
+const num2 = 3;
+
+const num3 = 1 + 2;
+```
+
+If you got all three correct, you already have a head-start in this topic! If you didn't, don't worry - we'll go over why these answers
+are the way they are.
+
+### First example
+
+In the first variable, we write `let num1 = 10`. This declares a variable with the value of `10`. Pretty straightforward. The part that
+_isn't_, however, comes in the form of its implicit type. TypeScript's strongest aspect, arguably, is its ability to decide whether to infer
+types strictly or create a looser definition.
+
+When we declare `let`, we aren't certain that this value stays the same, so TypeScript knows that it is possible to mutate it
+in the future. To be safe, TypeScript assigns an implicit `number` type to the variable.
+
+This means that `num1` can be re-assigned _any_ number, as long as its type is `number`. No random strings or arrays allowed!
+
+```ts twoslash
+let num = 10;
+
+// @errors: 2322
+num = "hello world";
+
+num = 20;
+```
+
+### Second example
+
+For the second example, we have a constant, `num2`, with a value of `3`. But this time, its type isn't `number` - it's `3`?!
+_Why is this the case?_
+
+This is again another demonstration of TypeScript's type inference, but this time, built on JavaScript principles. TypeScript is
+is a superset of JavaScript, which means that hard rules in JS are still applicable here.
+
+In this case, a `const` is immutable, thus TypeScript can narrowly infer its type as `3`.
+
+Now hold on, why is `3` even a type in the first place? Isn't it a _value?_ This is indeed true, except that TypeScript is also
+allows certain literal values to act as types. This is a unique and fascinating ability the language possesses, and
+is one that can be utilised in many cases.
+
+For example, I could restrict a function argument to allow only certain numbers:
+
+```ts twoslash
+const player: MusicControls = {
+	setVolume: vol => {},
+};
+
+// ---cut---
+type MusicControls = {
+	setVolume: (volume: 0 | 25 | 50 | 100) => void;
+};
+
+// @errors: 2345
+player.setVolume(10);
+player.setVolume(50);
+player.setVolume(100);
+```
+
+Pretty inflexible music player, but it shows that numbers are indeed valid types!
+
+### Third example
+
+So in the third example, we end up with the `number` type. But we just learnt that `const` definitions should return their literal value as
+a type, so isn't it intuitive for TypeScript to also assign `3` as the type?
+On paper, it does match the aforementioned criteria...
+
+At first glance, the difference here isn't easily noticeable. But there's something about TypeScript's compiler to take note of: types are only
+evaluated at _**compile-time**_. An arithmetic operation (in this case, addition) is a _**runtime**_ operation.
+
+What this means is that TypeScript actually _has no idea_ what `1 + 2` resolves to at compile time! Therefore, it just infers that the type is of `number`.
+
+<Alert type="info" title="Applying set theory">
+
+Now that you have a little background about implicit type specificity, let's do a little exercise. Why does TypeScript complain about this?
+
+```ts twoslash
+// @errors: 2322
+const num: 1 = 10;
+```
+
+The answer lies within **set theory**, regarding unions. In fact, the previous examples all had to do with set theory!
+
+In TypeScript, `number` is known as **the set that contains any number**, e.g.
+1; 20; 1,245; 429,582,157,197.
+
+Think of it this way. `10` is assignable to the `number` set, because `number` contains all possible numbers. But can we
+instead assign `number` to `10`?
+
+Short answer is - nope. In this case, `1` is just a set that can only contain one value - `1`. In the example,
+we try to assert `10` as `1`, and it fails because of this reason.
+
+</Alert>
+
+## Tuples
+
+Now that we've gotten the basics out of the way, an essential factor of type manipulation is **tuples**.
+Tuples are arrays with fixed lengths and determined values, and these guys are extremely powerful in constructing complex types.
+
+<Alert type="warning" title="Tuples aren't 'real'...?">
+	There isn't actually a true implementation of a fixed-length array in JavaScript. Rather, TypeScript raises
+	type errors if we try to mutate it in any way, giving it the illusion of a tuple. Under the hood, the array
+	is still mutable!
+</Alert>
+
+Here are the ways to create a tuple, and a definition of an array:
+
+```ts twoslash
+const tuple1 = [1, 2, 3] as const;
+//    ^?
+
+const tuple2: [1, 2, 3] = [1, 2, 3];
+//	  ^?
+
+const array: number[] = [1, 2, 3];
+//	  ^?
+```
+
+We either use `as const` or assert the value as `[1, 2, 3]` to **really** convince TypeScript that what we declared _is_ in fact a tuple.
+This means that its type _and_ value are now the same: `[1, 2, 3]`.
+
+Without it, TypeScript will loosely infer `number[]`, like on the last line.
+
+We also can't modify tuples in any form, and some methods are even omitted by TypeScript:
+
+```ts twoslash
+const tuple = [1, 2, 3] as const;
+
+// @errors: 2540 2339
+// can't reassign length
+tuple.length = 0;
+
+tuple.push(10);
+```
+
+### The 'length' property
+
+Okay, so tuples seem pretty rigid. Why are they useful anyway?
+
+Their magic comes from the `length` property. It is `readonly`, so it has a special feature:
+
+```ts twoslash
+const tuple = [1, 2, 3] as const;
+
+tuple.length;
+//      ^?
+```
+
+Remember the `const` examples from earlier? Just like in `const` definitions, the values in tuples are determinate,
+so TypeScript can safely assume the length of the tuple - which in this case is typed as `3`.
+Compare that to a regular array, where we get `number` instead!
+
+**_How cool is that??_** This opens up a whole new world of possibilities in the type world.
+
+With that, we can get started on implementing addition.
+
+## Creating the \<Add\> type
+
+Our end type should produce a result like this.
+
+```ts
+type Three = Add<1, 2>;
+//	 ^ 3
+```
+
+<Alert type="info" title="Possibly confusing topics ahead">
+	We will be using certain features such as recursion, `infer`, and generics pretty heavily ahead. Only
+	recursion will be confronted as generics are beyond the scope of this post (it's already pretty long), so
+	if you get confused or aren't familiar with those topics, do conduct some research first!
+</Alert>
+
+### Type recursion
+
+Majority of what we're about to do involves **recursion**. So let's tackle that first.
+
+In programming languages, recursion is a common way to get a function to execute itself repeatedly until a condition is met. It's useful for
+things with arbitrary depth like returning a folder's children, and each child's children as well.
+
+All recursive functions consist of 3 components:
+
+1. The **base case** is a condition that **terminates recursion** to prevent infinite re-execution.
+2. **Recursion case(s)** is/are where the **function calls itself with modified arguments**.
+3. All recursive functions' outputs **should eventually fulfill the base case.**
+
+For instance, to find the factorial of a number, we can use this function:
+
+```ts twoslash
+function factorial(n: number): number {
+	// base case
+	if (n === 1 || n === 0) return n;
+
+	// recursion case
+	return n * factorial(n - 1);
+	// eventually reaches 1, which fulfills the base case
+}
+
+const result = factorial(4); // 24
+```
+
+In TypeScript, we can use recursion on the type layer as well! Though it does work a little differently in terms of syntax.
+
+Let's zoom in on TypeScript's bundled utility type, `Awaited`. It allows us to extract the type of a
+`Promise`'s resolved value recursively. Hover over its type definition!
+
+```ts twoslash
+/// <reference types="node" />
+// ---cut---
+type Unwrapped = Awaited<Promise<Promise<Promise<Promise<Promise<number>>>>>>;
+//	 ^?
+```
+
+We can also make our own crude implementation:
+
+```ts twoslash
+type MyAwaited<T> = T extends PromiseLike<infer A> 
+	? (A extends PromiseLike<any> 
+		? MyAwaited<A> 
+		: A) 
+	: never;
+
+type Unwrapped = MyAwaited<Promise<Promise<Promise<Promise<Promise<number>>>>>>;
+//		^?
+```
+
+Let's dissect our `MyAwaited` type:
+
+1. Try to infer the type of `A` if `T` is a `Promise`.
+2. If it is, check if `A` is also a `Promise`. This is our **recursion case**.
+3. If it is, re-use the type, with `A` as the type argument.
+4. If `A` does not extend `Promise`, we return `A`, as our final unwrapped type. This is our **base case**, and also our result.
+
+Now that we've got out of the way, we can move on to the first _real_ step.
+
+### Mapping numbers to tuples
+
+Obviously, we can't just do something like the following to achieve addition. TypeScript will not recogise this as valid code:
+
+```ts twoslash
+// @errors: 1005
+type Three = 1 + 2;
+```
+
+Things like mathematical operators do not work on the type layer. We need to think outside of the box. 
+As we learnt, tuples contain a `length` property with a fixed number type. How can we utilise it?
+
+We can use recursion to 'modify' a tuple. Let's see this in action.
+
+First, let's define a helper type for getting a tuple's length, for ease of use:
+
+```ts twoslash
+type Length<T extends any[]> = T["length"];
+```
+
+Next, let's make a way to convert numbers to tuples. Here's the concept:
+
+1. We want to define a recursive type
+2. An internal counter should increment and be returned when we reach the desired number
+3. We need to have a base case to stop recursion
+
+With these points in mind, we'll create a type that does this, step-by-step:
+
+Let's create a type called `MapToTuple`, which takes in a number:
+
+```ts twoslash
+// @noErrors
+type MapToTuple<T extends number> = ...
+```
+
+It's going to be a recursive function, so want to create our base case and our accumulator -
+we'll store that as 'state' via default generic values:
+
+```ts twoslash
+// @noErrors
+// 0 is an arbitrary value
+type MapToTuple<T extends number, Acc extends 0[] = []> = ...
+```
+
+The idea is to increase `Acc`, until its length matches `T`.
+
+Next, create the recursion logic:
+
+```ts twoslash
+type Length<T extends any[]> = T["length"];
+// ---cut---
+type MapToTuple<T extends number, Acc extends 0[] = []> = Length<Acc> extends T
+	? Acc
+	: MapToTuple<T, [...Acc, 0]>;
+```
+
+Okay. Let's pause here. What exactly are we doing with `extends`?
+
+Every time we compile the type, we check if the length of `Acc` is the same as `T`. If it is, we return `Acc`, our tuple type. If it's not,
+we return `MapToTuple` again, but we do 2 things:
+
+1. Pass `T` as the same argument. This shouldn't change as it's our desired number.
+2. We use the spread operator `...` on `Acc` to get its items, then append an extra value. This new value goes into the `Acc` slot.
+
+<Alert type="info" title="The spread operator">
+	The spread `...` operator can be used on the type layer too. This gives us the value of a tuple.
+
+	```ts twoslash
+		type Arr1 = [1, 2, 3];
+		type Arr2 = [4, 5, 6];
+		
+		type Arr3 = [...Arr1, ...Arr2];
+		//	 ^?
+	```
+</Alert>
+
+If we input a number into `MapToTuple`, this is what we get:
+
+```ts twoslash
+type Length<T extends any[]> = T["length"];
+type MapToTuple<T extends number, Acc extends 0[] = []> = Length<Acc> extends T
+	? Acc
+	: MapToTuple<T, [...Acc, 0]>;
+// ---cut---
+type Hello = MapToTuple<4>;
+//   ^?
+
+type World = MapToTuple<8>;
+//	 ^?
+```
+
+### Summing it all together
+
+We're almost done! Let's collect all of this into one convenient type - `Add`. The final step is to map each of the 2 numbers we want to 
+add into a tuple, then concatenate them to get the total length:
+
+```ts twoslash
+type Length<T extends any[]> = T["length"];
+type MapToTuple<T extends number, Acc extends 0[] = []> = Length<Acc> extends T
+	? Acc
+	: MapToTuple<T, [...Acc, 0]>;
+// ---cut---
+type Add<A extends number, B extends number> = Length<[...MapToTuple<A>, ...MapToTuple<B>]>;
+
+type Three = Add<1, 2>;
+//	 ^?
+
+type Ten = Add<4, 6>;
+//	 ^?
+```
+
+And we've done it! We've successfully implemented addition in TypeScript using only types! If this is still confusing to you,
+here's a summary of everything we've done so far:
+
+<AddDemo />
+
+We can take it a bit further. Here's a bonus challenge.
+
+## Replicating the Fibonacci sequence
+
+The [Fibonacci sequence](https://en.wikipedia.org/wiki/Fibonacci_sequence) is a very famous pattern of numbers,
+denoted by `Fn = F(n - 1) + F(n - 2)`, where `n > 1`. It's a very common algorithm example on platforms like LeetCode, where programmers
+are often challenged to implement it with various languages. With TypeScript types however, it's a different story!
+
+I encourage you to attempt it yourself. We will re-use our created `Add` component here.
+
+If you're done, let's start off with the type itself:
+
+```ts twoslash
+// @noErrors
+type Fibonacci<
+	N extends number,
+	Sum extends number = 1,
+	Prev extends number = 0,
+	Counter extends number = 1
+> = ...;
+```
+
+1. `N` is the number we're inputting. So if we input `4`, we expect to get `3`. With `8`, we expect `21`, etc.
+2. `Sum` is similar to `Acc` in our `Add` type. Set initial value to `1`, as the first term in the sequence is 1.
+3. `Prev` is the value of previous `Sum`. At `n = 1`, `Prev` should be `0`.
+4. `Counter` is just how many times we have to iterate. Once we reach `N`, we stop executing (base case).
+
+The implementation is something like this:
+
+<FibDemo />
+
+Same concept, more complex implementation!
+
+## Limits
+
+If you tinkered around with the code, you might've realised that this implementation of addition is actually quite limited. For example,
+let's add `1000` to `1000`:
+
+```ts twoslash
+type Length<T extends any[]> = T["length"];
+type MapToTuple<T extends number, Acc extends 0[] = []> = Length<Acc> extends T
+	? Acc
+	: MapToTuple<T, [...Acc, 0]>;
+type Add<A extends number, B extends number> = Length<[...MapToTuple<A>, ...MapToTuple<B>]>;
+// ---cut---
+// @errors: 2589
+type Result = Add<1000, 1000>;
+```
+
+The code errors out and we get this message! What does it mean exactly?
+
+Even though TypeScript allows recursive types, there is a hard recursion limit of 999 to help prevent
+programs from stalling. The only way to get around this is to use a **very very** [complex workaround](https://github.com/type-challenges/type-challenges/issues/515)
+involving a genius level of string manipulation that my pea-brain cannot comprehend, so this limit is here to stay for the time being!
+
+## End
+
+I hope you've enjoyed learning about the countless fascinating things about TypeScript's type system. 
+If you would like to see more challenges like these, check out the [type-challenges](https://github.com/type-challenges/type-challenges) repo.
+
+<Alert type="info" title="Subtraction?">
+	While addition may be quite simple, **subtraction**, on the other hand, is a whole other ball game. Check
+	out this [solution](https://github.com/type-challenges/type-challenges/issues/35324). Who knew it could be
+	so difficult?
+</Alert>
