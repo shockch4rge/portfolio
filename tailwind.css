@@ -24,6 +24,19 @@
 	--ease-in-cubic: cubic-bezier(0.18, 0.89, 0.23, 1);
 	--ease-in-jerk: cubic-bezier(0.14, -0.53, 0, 1);
 
+	--content-article-md: 60ch;
+	--content-article-lg: 62ch;
+	--content-article-xl: 72ch;
+	--content-article-2xl: 80ch;
+
+	--content-toc-lg: 18rem;
+	--content-toc-xl: 22rem;
+
+	--content-container-md: var(--content-article-md);
+	--content-container-lg: calc(var(--content-article-lg) + var(--content-toc-lg));
+	--content-container-xl: calc(var(--content-article-xl) + var(--content-toc-xl));
+	--content-container-2xl: calc(var(--content-article-2xl) + var(--content-toc-xl));
+
 	@keyframes slide {
 		from {
 			transform: translateX(-20%);
@@ -91,6 +104,10 @@
 		@apply font-display;
 	}
 
+	button {
+		@apply cursor-pointer disabled:cursor-not-allowed;
+	}
+
 	h1 {
 		@apply text-white text-4xl lg:text-5xl font-bold;
 	}
@@ -127,6 +144,14 @@
 		::marker {
 			@apply font-display text-indigo-400;
 		}
+
+		& > li {
+			@apply text-white font-body;
+		}
+	}
+
+	code {
+		@apply font-display!;
 	}
 
 	/*
@@ -147,7 +172,11 @@
 }
 
 @utility container {
-	@apply min-w-full grid grid-cols-1 px-8 sm:px-24 lg:grid-cols-[1fr_minmax(65ch,var(--container-4xl))_1fr] 2xl:grid-cols-[1fr_var(--container-5xl)_1fr] *:lg:col-start-2 auto-cols-min overflow-x-hidden;
+	@apply min-w-full grid grid-cols-container px-8 sm:px-24 overflow-x-hidden;
+}
+
+@utility grid-cols-container {
+	@apply grid-cols-1 lg:grid-cols-[1fr_minmax(65ch,var(--container-4xl))_1fr] 2xl:grid-cols-[1fr_var(--container-5xl)_1fr] *:lg:col-start-2 auto-cols-min;
 }
 
 @utility hero {
@@ -160,30 +189,30 @@
 
 @custom-variant cb {
 	.expressive-code {
-		@slot !important;
+		@slot;
 	}
 }
 
 @custom-variant cbf {
-	.expressive-code .frame {
-		@slot !important;
+	.expressive-code > figure.frame {
+		@slot;
 	}
 }
 
 @custom-variant cbp {
-	.expressive-code .frame pre {
-		@slot !important;
-	}
-}
-
-@custom-variant cbt {
-	.expressive-code .frame .has-title .title {
-		@slot !important;
+	.expressive-code > figure.frame pre {
+		@slot;
 	}
 }
 
 @custom-variant cbh {
-	.expressive-code .frame .has-title .header {
-		@slot !important;
+	.expressive-code > figure.frame.has-title > figcaption.header {
+		@slot;
+	}
+}
+
+@custom-variant cbt {
+	.expressive-code > figure.frame.has-title > figcaption.header > span.title {
+		@slot;
 	}
 }
