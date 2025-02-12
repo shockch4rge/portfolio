@@ -4,6 +4,7 @@ import ContentLayout from "@layouts/ContentLayout.astro";
 import { getProjects } from "../../content.config";
 import RelatedProjects from "@content/components/RelatedProjects.astro";
 import Tags from "@content/components/Tags.astro";
+import { DateTime } from "luxon";
 
 export async function getStaticPaths() {
 	const projects = await getProjects();
@@ -15,7 +16,9 @@ export async function getStaticPaths() {
 }
 
 const { project } = Astro.props;
-const { Content, headings } = await render(project);
+const { Content, headings, remarkPluginFrontmatter: frontmatter } = await render(project);
+
+const lastUpdated = DateTime.fromISO(frontmatter.lastUpdated).toUTC(8).toLocaleString(DateTime.DATE_FULL);
 const { name, description, draft, pubDate, githubUrl, related, tags, url } = project.data;
 ---
 
@@ -23,7 +26,9 @@ const { name, description, draft, pubDate, githubUrl, related, tags, url } = pro
 	<ContentLayout title={name} headings={headings} tags={tags}>
 		<h1>{name}</h1>
 		<div class="mb-6 font-display font-medium text-gray-600">
-			Published on {new Date(pubDate).toLocaleDateString("en-sg")}
+			Published {DateTime.fromJSDate(pubDate).toUTC(8).toLocaleString(DateTime.DATE_FULL)} : updated {
+				lastUpdated
+			}
 		</div>
 		<Tags data={tags ?? []} />
 		<Content />
