@@ -1,4 +1,4 @@
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useState } from "react";
 import { cn } from "src/util/cn";
 
@@ -12,8 +12,9 @@ type Props = ComponentProps<"div"> &
 
 export const Stepper: React.FC<Props> = ({ maxSteps, stepId, ...props }) => {
 	const [step, setStep] = useState(0);
+	const shouldReduceMotion = useReducedMotion();
 	const stepVisual = step + 1;
-    const ticker = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+	const ticker = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 
 	const steps = Array(maxSteps)
 		.fill(0)
@@ -66,6 +67,9 @@ export const Stepper: React.FC<Props> = ({ maxSteps, stepId, ...props }) => {
 				<div className="flex h-8 text-center text-2xl text-primary font-bold font-display [&_span]:block [&_span]:leading-[32px] overflow-y-hidden">
 					<div className="mr-2 text-white">Step </div>
 					<motion.div
+						transition={{
+							duration: shouldReduceMotion ? 0 : 0.5,
+						}}
 						animate={{
 							y: -Math.floor(stepVisual / 10) * 32,
 						}}
@@ -75,6 +79,7 @@ export const Stepper: React.FC<Props> = ({ maxSteps, stepId, ...props }) => {
 						))}
 					</motion.div>
 					<motion.div
+						transition={shouldReduceMotion ? { duration: 0 } : undefined}
 						animate={{
 							y: -Math.round(((stepVisual / 10) % 1) * 10) * 32,
 						}}
@@ -94,38 +99,39 @@ export const Stepper: React.FC<Props> = ({ maxSteps, stepId, ...props }) => {
 						"text-gray-300 disabled:text-gray-600 text-xl",
 						"border-2 border-slate-700 disabled:border-slate-800",
 						"not-disabled:active:scale-95 not-disabled:hover:scale-105",
-						"rounded-lg transition"
+						"rounded-lg transition "
 					)}
 				>
 					<i className="ph-bold ph-caret-right">next</i>
 				</button>
 			</div>
-			<div className="min-h-96 relative">
+			<div className="min-h-fit mx-8 grid grid-cols-1 relative">
 				<AnimatePresence initial={false}>
 					{steps.map(
 						(s, i) =>
 							i === step && (
 								<motion.div
-									key={step}
+									key={`${stepId}${step}`}
+									className="col-start-1 row-start-1"
 									transition={{
-										duration: 0.2,
+										duration: shouldReduceMotion ? 0 : 0.25,
 										ease: [0.18, 0.89, 0.23, 1],
 									}}
-									className="absolute inset-x-12"
 									initial={{
-										opacity: 0,
-										scaleX: 0.9,
+										scaleX: 0.95,
 									}}
 									animate={{
 										zIndex: 1,
-										x: 0,
 										opacity: 1,
 										scaleX: 1,
 									}}
 									exit={{
 										zIndex: 0,
-										opacity: 0,
-										scaleX: 0.9,
+										scaleX: 0.95,
+										transition: {
+											duration: 0,
+											visualDuration: 0.25,
+										},
 									}}
 								>
 									{s}
