@@ -30,17 +30,22 @@
 		"remark-toc": "^9.0.0",
 		"sharp": "^0.33.5",
 		"shiki": "^2.3.2",
+		"shiki-magic-move": "^1.0.0",
 		"tailwind-merge": "^2.6.0",
 		"typescript": "^5.7.2"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^1.9.4",
+		"@shikijs/langs": "^2.3.2",
+		"@shikijs/themes": "^2.3.2",
+		"@shikijs/transformers": "^2.3.2",
 		"@shikijs/twoslash": "^2.1.0",
 		"@tailwindcss/container-queries": "^0.1.1",
 		"@tailwindcss/postcss": "^4.0.0",
 		"@tailwindcss/vite": "^4.0.0",
 		"@types/luxon": "^3.4.2",
 		"@types/node": "^22.13.1",
-		"tailwindcss": "4.0.0"
+		"tailwindcss": "4.0.0",
+		"twoslash-cdn": "^0.2.12"
 	}
 }

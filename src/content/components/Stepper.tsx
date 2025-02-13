@@ -1,6 +1,8 @@
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { cn } from "src/util/cn";
+
+import { CodeBlock } from "./CodeBlock";
 
 import type { ComponentProps, JSX } from "react";
 
@@ -8,25 +10,28 @@ type Props = ComponentProps<"div"> &
 	Record<`${string}-step-${string}`, JSX.Element> & {
 		maxSteps: number;
 		stepId: string;
+		code: string[];
 	};
 
-export const Stepper: React.FC<Props> = ({ maxSteps, stepId, ...props }) => {
+export const Stepper: React.FC<Props> = ({ maxSteps, stepId, code, ...props }) => {
 	const [step, setStep] = useState(0);
+	// we need react state to animate shiki
+	const [currentCode, setCurrentCode] = useState(code[0]);
 	const shouldReduceMotion = useReducedMotion();
-	const stepVisual = step + 1;
 	const ticker = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
-
-	const steps = Array(maxSteps)
-		.fill(0)
-		.map((_, i) => props[`${stepId}-step-${i}`]);
+	const stepVisual = step + 1;
 
 	const paginate = (direction: -1 | 1) => {
 		setStep(step => step + direction);
 	};
 
+	useEffect(() => {
+		setCurrentCode(code[step]);
+	}, [code[step], step]);
+
 	return (
 		<div
-			// biome-ignore lint/a11y/noNoninteractiveTabindex: we need to create a focusable context for arrow keys
+			// biome-ignore lint/a11y/noNoninteractiveTabindex: create a focusable context for arrow keys
 			tabIndex={0}
 			className="w-full flex flex-col"
 			onKeyDown={e => {
@@ -67,9 +72,7 @@ export const Stepper: React.FC<Props> = ({ maxSteps, stepId, ...props }) => {
 				<div className="flex h-8 text-center text-2xl text-primary font-bold font-display [&_span]:block [&_span]:leading-[32px] overflow-y-hidden">
 					<div className="mr-2 text-white">Step </div>
 					<motion.div
-						transition={{
-							duration: shouldReduceMotion ? 0 : 0.5,
-						}}
+						transition={shouldReduceMotion ? { duration: 0 } : undefined}
 						animate={{
 							y: -Math.floor(stepVisual / 10) * 32,
 						}}
@@ -79,6 +82,7 @@ export const Stepper: React.FC<Props> = ({ maxSteps, stepId, ...props }) => {
 						))}
 					</motion.div>
 					<motion.div
+						initial={{ y: -32 }}
 						transition={shouldReduceMotion ? { duration: 0 } : undefined}
 						animate={{
 							y: -Math.round(((stepVisual / 10) % 1) * 10) * 32,
@@ -99,46 +103,16 @@ export const Stepper: React.FC<Props> = ({ maxSteps, stepId, ...props }) => {
 						"text-gray-300 disabled:text-gray-600 text-xl",
 						"border-2 border-slate-700 disabled:border-slate-800",
 						"not-disabled:active:scale-95 not-disabled:hover:scale-105",
-						"rounded-lg transition "
+						"rounded-lg transition"
 					)}
 				>
 					<i className="ph-bold ph-caret-right">next</i>
 				</button>
 			</div>
 			<div className="min-h-fit mx-8 grid grid-cols-1 relative">
-				<AnimatePresence initial={false}>
-					{steps.map(
-						(s, i) =>
-							i === step && (
-								<motion.div
-									key={`${stepId}${step}`}
-									className="col-start-1 row-start-1"
-									transition={{
-										duration: shouldReduceMotion ? 0 : 0.25,
-										ease: [0.18, 0.89, 0.23, 1],
-									}}
-									initial={{
-										scaleX: 0.95,
-									}}
-									animate={{
-										zIndex: 1,
-										opacity: 1,
-										scaleX: 1,
-									}}
-									exit={{
-										zIndex: 0,
-										scaleX: 0.95,
-										transition: {
-											duration: 0,
-											visualDuration: 0.25,
-										},
-									}}
-								>
-									{s}
-								</motion.div>
-							)
-					)}
-				</AnimatePresence>
+				<div key={`${stepId}${step}`} className="col-start-1 row-start-1">
+					<CodeBlock code={currentCode} lang="ts" />
+				</div>
 			</div>
 		</div>
 	);
