@@ -1,4 +1,3 @@
-// @noErrors
 type Length<T extends any[]> = T["length"];
 
 type MapToTuple<T extends number, Acc extends 0[] = []> = 
