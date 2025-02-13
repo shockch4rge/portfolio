@@ -1,6 +1,5 @@
 ---
 import Frame from "@content/components/frame/Frame.astro";
-import { Code } from "astro-expressive-code/components";
 import step1 from "./steps/1.d.ts?raw";
 import step2 from "./steps/2.d.ts?raw";
 import step3 from "./steps/3.d.ts?raw";
@@ -10,15 +9,9 @@ import step6 from "./steps/6.d.ts?raw";
 import { Stepper } from "@content/components/Stepper";
 
 const slotPrefix = "add-demo";
+const code = [step1, step2, step3, step4, step5, step6];
 ---
 
 <Frame noPadding>
-	<Stepper maxSteps={6} stepId={slotPrefix} client:load>
-		<Code class="mx-0!" slot={`${slotPrefix}-step-0`} code={step1} lang="ts" meta="twoslash {1,1}" />
-		<Code class="mx-0!" slot={`${slotPrefix}-step-1`} code={step2} lang="ts" meta="twoslash {3,3}" />
-		<Code class="mx-0!" slot={`${slotPrefix}-step-2`} code={step3} lang="ts" meta="twoslash {4,5}" />
-		<Code class="mx-0!" slot={`${slotPrefix}-step-3`} code={step4} lang="ts" meta="twoslash {6,6}" />
-		<Code class="mx-0!" slot={`${slotPrefix}-step-4`} code={step5} lang="ts" meta="twoslash {8,8}" />
-		<Code class="mx-0!" slot={`${slotPrefix}-step-5`} code={step6} lang="ts" meta="twoslash {9,9}" />
-	</Stepper>
+	<Stepper maxSteps={6} stepId={slotPrefix} code={code} client:load />
 </Frame>

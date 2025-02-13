@@ -1,23 +1,8 @@
-import type { Component, JSX } from "react";
-import type { BundledLanguage } from "shiki/bundle/web";
-import { toJsxRuntime } from "hast-util-to-jsx-runtime";
-import { Fragment } from "react";
-import { jsx, jsxs } from "react/jsx-runtime";
-import { codeToHast } from "shiki/bundle/web";
+import { createHighlighterCore } from "shiki/bundle/web";
+import { createJavaScriptRegexEngine } from "shiki/engine-javascript.mjs";
 
-export async function highlight(code: string, lang: BundledLanguage, component: (props: any) => React.ReactNode) {
-	const out = await codeToHast(code, {
-		lang,
-		theme: "github-dark",
-	});
-
-	return toJsxRuntime(out, {
-		Fragment,
-		jsx,
-		jsxs,
-		components: {
-			// your custom `pre` element
-			pre: component,
-		},
-	}) as JSX.Element;
-}
+export const highlighter = await createHighlighterCore({
+	themes: [import("@shikijs/themes/github-dark-default")],
+	langs: [import("@shikijs/langs/typescript")],
+	engine: createJavaScriptRegexEngine(),
+});
