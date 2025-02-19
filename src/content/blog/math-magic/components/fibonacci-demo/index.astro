@@ -1,6 +1,6 @@
 ---
 import Frame from "@content/components/frame/Frame.astro";
-import { Stepper } from "@content/components/Stepper";
+import { CodeStepper } from "@content/components/code-stepper/CodeStepper";
 import step1 from "./steps/1.d.ts?raw";
 import step2 from "./steps/2.d.ts?raw";
 import step3 from "./steps/3.d.ts?raw";
@@ -14,5 +14,5 @@ const code = [step1, step2, step3, step4, step5, step6, step7];
 ---
 
 <Frame noPadding>
-	<Stepper maxSteps={7} stepId={slotPrefix} code={code} client:load />
+	<CodeStepper stepId={slotPrefix} code={code} lang="ts" client:load />
 </Frame>

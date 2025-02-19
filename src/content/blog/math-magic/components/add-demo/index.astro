@@ -6,12 +6,12 @@ import step3 from "./steps/3.d.ts?raw";
 import step4 from "./steps/4.d.ts?raw";
 import step5 from "./steps/5.d.ts?raw";
 import step6 from "./steps/6.d.ts?raw";
-import { Stepper } from "@content/components/Stepper";
+import { CodeStepper } from "@content/components/code-stepper/CodeStepper";
 
 const slotPrefix = "add-demo";
 const code = [step1, step2, step3, step4, step5, step6];
 ---
 
 <Frame noPadding>
-	<Stepper maxSteps={6} stepId={slotPrefix} code={code} client:load />
+	<CodeStepper stepId={slotPrefix} code={code} lang="ts" client:load />
 </Frame>
