@@ -1,25 +1,31 @@
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { ShikiMagicMove } from "shiki-magic-move/react";
 import { cn } from "src/util/cn";
+
+import { highlighter } from "@util/highlighter";
 
 import { CodeBlock } from "./CodeBlock";
 
 import type { ComponentProps, JSX } from "react";
-
+import type { BundledLanguage } from "shiki/bundle/web";
 type Props = ComponentProps<"div"> &
 	Record<`${string}-step-${string}`, JSX.Element> & {
-		maxSteps: number;
 		stepId: string;
 		code: string[];
+		lang: BundledLanguage;
 	};
 
-export const Stepper: React.FC<Props> = ({ maxSteps, stepId, code, ...props }) => {
+export const CodeStepper: React.FC<Props> = ({ stepId, code, lang }) => {
 	const [step, setStep] = useState(0);
-	// we need react state to animate shiki
+	// we need react state to animate shiki code
 	const [currentCode, setCurrentCode] = useState(code[0]);
-	const shouldReduceMotion = useReducedMotion();
+
 	const ticker = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+	const tickerOffset = 32;
+
 	const stepVisual = step + 1;
+	const shouldReduceMotion = useReducedMotion();
 
 	const paginate = (direction: -1 | 1) => {
 		setStep(step => step + direction);
@@ -44,7 +50,7 @@ export const Stepper: React.FC<Props> = ({ maxSteps, stepId, code, ...props }) =
 						return;
 					}
 					case "ArrowRight": {
-						if (step !== maxSteps - 1) {
+						if (step !== code.length - 1) {
 							paginate(1);
 						}
 
@@ -74,7 +80,7 @@ export const Stepper: React.FC<Props> = ({ maxSteps, stepId, code, ...props }) =
 					<motion.div
 						transition={shouldReduceMotion ? { duration: 0 } : undefined}
 						animate={{
-							y: -Math.floor(stepVisual / 10) * 32,
+							y: -Math.floor(stepVisual / 10) * tickerOffset,
 						}}
 					>
 						{ticker.map(d => (
@@ -85,7 +91,7 @@ export const Stepper: React.FC<Props> = ({ maxSteps, stepId, code, ...props }) =
 						initial={{ y: -32 }}
 						transition={shouldReduceMotion ? { duration: 0 } : undefined}
 						animate={{
-							y: -Math.round(((stepVisual / 10) % 1) * 10) * 32,
+							y: -Math.round(((stepVisual / 10) % 1) * 10) * tickerOffset,
 						}}
 					>
 						{ticker.map(d => (
@@ -95,7 +101,7 @@ export const Stepper: React.FC<Props> = ({ maxSteps, stepId, code, ...props }) =
 				</div>
 				<button
 					type="button"
-					disabled={step === maxSteps - 1}
+					disabled={step === code.length - 1}
 					onClick={() => paginate(1)}
 					className={cn(
 						"p-2 flex justify-center items-center",
@@ -111,7 +117,7 @@ export const Stepper: React.FC<Props> = ({ maxSteps, stepId, code, ...props }) =
 			</div>
 			<div className="min-h-fit mx-8 grid grid-cols-1 relative">
 				<div key={`${stepId}${step}`} className="col-start-1 row-start-1">
-					<CodeBlock code={currentCode} lang="ts" />
+					<CodeBlock code={currentCode} lang={lang} />
 				</div>
 			</div>
 		</div>
