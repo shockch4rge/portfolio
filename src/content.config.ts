@@ -1,5 +1,6 @@
 import { file, glob } from "astro/loaders";
-import { defineCollection, getCollection, reference, z } from "astro:content";
+import { defineCollection, getCollection, reference } from "astro:content";
+import { z } from "astro/zod"
 
 import type { InferEntrySchema } from "astro:content";
 
