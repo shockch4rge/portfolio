@@ -19,16 +19,14 @@ export default defineConfig({
   },
   integrations: [
     expressiveCode(),
-    mdx({
-      remarkPlugins: [remarkSectionize, remarkLastUpdatedTime],
-    }),
+    mdx(),
     react(),
   ],
 
   site: "https://favteo.com",
   markdown: {
     processor: unified({
-      remarkPlugins: [remarkToc],
+      remarkPlugins: [remarkToc, remarkSectionize, remarkLastUpdatedTime],
     }),
   },
   image: {
