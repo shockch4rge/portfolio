@@ -10,33 +10,36 @@ import tailwindcss from "@tailwindcss/vite";
 
 import react from "@astrojs/react";
 import remarkLastUpdatedTime from "./src/util/plugins/last-updated-time.mjs";
+import { unified } from "@astrojs/markdown-remark";
 
 // https://astro.build/config
 export default defineConfig({
-	vite: {
-		plugins: [tailwindcss()],
-	},
-	integrations: [
-		expressiveCode(),
-		mdx({
-			remarkPlugins: [remarkSectionize, remarkLastUpdatedTime],
-		}),
-		react(),
-	],
+  vite: {
+    plugins: [tailwindcss()],
+  },
+  integrations: [
+    expressiveCode(),
+    mdx({
+      remarkPlugins: [remarkSectionize, remarkLastUpdatedTime],
+    }),
+    react(),
+  ],
 
-	site: "https://favteo.com",
-	markdown: {
-		remarkPlugins: [remarkToc],
-	},
-	image: {
-		domains: ["svgl.app"],
-		remotePatterns: [
-			{
-				protocol: "https",
-			},
-		],
-	},
-	experimental: {
-		svg: true,
-	},
+  site: "https://favteo.com",
+  markdown: {
+    processor: unified({
+      remarkPlugins: [remarkToc],
+    }),
+  },
+  image: {
+    domains: ["svgl.app"],
+    remotePatterns: [
+      {
+        protocol: "https",
+      },
+    ],
+  },
+  experimental: {
+    svg: true,
+  },
 });
