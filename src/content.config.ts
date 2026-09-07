@@ -1,8 +1,8 @@
 import { file, glob } from "astro/loaders";
+import { z } from "astro/zod";
 import { defineCollection, getCollection, reference } from "astro:content";
-import { z } from "astro/zod"
 
-import type { InferEntrySchema } from "astro:content";
+import type { CollectionEntry } from "astro:content";
 
 const blog = defineCollection({
 	loader: glob({
@@ -44,11 +44,12 @@ const tags = defineCollection({
 	}),
 });
 
-export type BlogPost = InferEntrySchema<"blog"> & { id: string };
-export type Project = InferEntrySchema<"projects"> & { id: string };
-export type Tag = InferEntrySchema<"tags">;
 
-export const getProjects = async (options?: { withDraft: true }) => {
+export type BlogPost = CollectionEntry<"blog">;
+export type Project = CollectionEntry<"projects">;
+export type Tag = CollectionEntry<"tags">;
+
+export const getProjects = async (options?: { withDraft: true }): Promise<Project[]> => {
 	const withDraft = options?.withDraft;
 	const projects = await getCollection("projects");
 
