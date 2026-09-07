@@ -1,34 +1,43 @@
 ---
 import { render } from "astro:content";
-import { getBlogPosts } from "../../content.config";
-import ContentLayout from "@layouts/ContentLayout.astro";
+
 import Tags from "@content/components/Tags.astro";
+import ContentLayout from "@layouts/ContentLayout.astro";
+import { getEntries } from "astro:content";
 import { DateTime } from "luxon";
+import { getBlogPosts } from "../../content.config";
 
 export async function getStaticPaths() {
-	const posts = await getBlogPosts();
-	return posts.map(post => ({
-		params: { id: post.id },
-		props: { post },
-	}));
+    const posts = await getBlogPosts();
+    const tags = await getEntries(posts.flatMap(post => post.data.tags ?? []));
+    return posts.map(post => ({
+        params: { id: post.id },
+        props: { post, tags },
+    }));
 }
 
-const { post } = Astro.props;
-const { Content, headings, remarkPluginFrontmatter: frontmatter } = await render(post);
+const { post, tags } = Astro.props;
+const {
+    Content,
+    headings,
+    remarkPluginFrontmatter: frontmatter,
+} = await render(post);
 
-const lastUpdated = DateTime.fromISO(frontmatter.lastUpdated).toUTC(8).toLocaleString(DateTime.DATE_FULL);
-const { title, description, draft, pubDate, related, tags } = post.data;
+const lastUpdated = DateTime.fromISO(frontmatter.lastUpdated)
+    .toUTC(8)
+    .toLocaleString(DateTime.DATE_FULL);
+const { title, description, draft, pubDate, related } = post.data;
 ---
 
-<>
-	<ContentLayout title={title} headings={headings} tags={tags}>
-		<h1>{title}</h1>
-		<div class="mb-6 font-display font-medium text-gray-600">
-			Published {DateTime.fromJSDate(pubDate).toUTC(8).toLocaleString(DateTime.DATE_FULL)} : updated {
-				lastUpdated
-			}
-		</div>
-		<Tags data={tags ?? []} />
-		<Content />
-	</ContentLayout>
-</>
+<ContentLayout title={title} headings={headings} tags={tags}>
+    <h1>{title}</h1>
+    <div class="mb-6 font-display font-medium text-gray-600">
+        Published {
+            DateTime.fromJSDate(pubDate)
+                .toUTC(8)
+                .toLocaleString(DateTime.DATE_FULL)
+        } : updated {lastUpdated}
+    </div>
+    <Tags data={tags} />
+    <Content />
+</ContentLayout>
