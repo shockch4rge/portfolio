@@ -1,14 +1,14 @@
 ---
 import type { MarkdownHeading } from "astro";
 
-import BaseLayout from "./BaseLayout.astro";
 import Toc from "@content/components/toc/Toc.astro";
-import type { InferEntrySchema } from "astro:content";
+import type { Tag } from "src/content.config";
+import BaseLayout from "./BaseLayout.astro";
 
 interface Props {
 	title: string;
 	headings: MarkdownHeading[];
-	tags: InferEntrySchema<"projects" | "blog">["tags"];
+	tags: Tag[]
 }
 
 const { title, headings } = Astro.props;
