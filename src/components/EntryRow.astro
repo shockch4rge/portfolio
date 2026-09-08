@@ -1,0 +1,44 @@
+---
+import type { BlogPost, Project } from "src/content.config";
+import { getEntries } from "astro:content";
+
+interface Props {
+    baseUrl: string;
+    entry: Project | BlogPost;
+}
+
+const { baseUrl, entry } = Astro.props;
+
+const tags = await getEntries(entry.data.tags);
+---
+
+<li
+    class:list={[
+        "pt-8 pb-4 text-white lg:text-gray-600 lg:hover:text-white transition-colors relative",
+    ]}
+>
+    <a href={`${baseUrl}/${encodeURIComponent(entry.id)}`}>
+        <div>
+            <h2 class="mb-2 text-xl tracking-wide">{entry.data.title}</h2>
+            <ul class="mb-4 flex">
+                {
+                    tags.map(({ data: { id, iconUrl } }) => (
+                        <li class="grid place-items-center px-1 py-0.5 text-xs">
+                            {iconUrl && (
+                                <img
+                                    src={iconUrl}
+                                    alt={`${id} logo`}
+                                    class="flex max-h-[18px]"
+                                    width={18}
+                                    height={18}
+                                />
+                            )}
+                        </li>
+                    ))
+                }
+            </ul>
+            <p class="text-sm">{entry.data.description}</p>
+            <slot />
+        </div>
+    </a>
+</li>
