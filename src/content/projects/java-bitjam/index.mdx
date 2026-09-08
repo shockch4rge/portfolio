@@ -7,7 +7,8 @@ tags:
     - "android"
     - "java"
 related:
-    - discord-bitjam
+    projects:
+        - discord-bitjam
 ---
 
 import Tags from "@content/components/Tags.astro";
@@ -67,12 +68,14 @@ public T getValue() {
 }
 ```
 
-<figcaption>A `LiveData` superclass that asserted non-null values. Had to declare it 3 times.</figcaption>
+<figcaption>
+    A `LiveData` superclass that asserted non-null values. Had to declare it 3 times.
+</figcaption>
 
 <Alert type="info" title="Why does this exist?">
-	`PureLiveData` was simply a class that extended Android's `LiveData`. As seen in the above figure, there
-	were a lot of areas where one would need to constantly redefine non-null values. This idea came from a
-	fellow classmate, Zechariah.
+    `PureLiveData` was simply a class that extended Android's `LiveData`. As seen in the above
+    figure, there were a lot of areas where one would need to constantly redefine non-null values.
+    This idea came from a fellow classmate, Zechariah.
 </Alert>
 
 Initialising anonymous inner classes took up a ton of space, even when you didn't need to all use its methods.
@@ -98,7 +101,9 @@ slide_up.setAnimationListener(new Animation.AnimationListener() {
 });
 ```
 
-<figcaption>`onAnimationStart` and `onAnimationRepeat` are unused, but they still have to exist.</figcaption>
+<figcaption>
+    `onAnimationStart` and `onAnimationRepeat` are unused, but they still have to exist.
+</figcaption>
 
 ### FINDING A DATABASE
 
@@ -150,12 +155,12 @@ public void createNewPlaylist(String title, String songId) {
 ```
 
 <Alert type="info" title="Why is there a song id in the parameters?">
-	In order to get around some Firestore quirks, creating a new playlist requires the user to include a song
-	along with the name of the new playlist. This may seem unintuitive, but it also helps to reduce a
-	significant amount of code that might deem unnecessary.
+    In order to get around some Firestore quirks, creating a new playlist requires the user to
+    include a song along with the name of the new playlist. This may seem unintuitive, but it also
+    helps to reduce a significant amount of code that might deem unnecessary.
 </Alert>
 
 <Alert type="info" title="Liking Songs">
-	Liking songs just added to a special default playlist assigned to each user. This is quite common amongst
-	music streaming apps!
+    Liking songs just added to a special default playlist assigned to each user. This is quite
+    common amongst music streaming apps!
 </Alert>
