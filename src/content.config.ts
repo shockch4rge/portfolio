@@ -9,11 +9,13 @@ const post = z.object({
     description: z.string(),
     pubDate: z.coerce.date(),
     draft: z.boolean().optional().default(false),
-    tags: z.array(reference("tags")).optional().default([]),
+    tags: z.array(reference("tags")).default([]),
     related: z
-        .array(z.union([reference("blog"), reference("projects")]))
-        .optional()
-        .default([]),
+        .object({
+            blog: z.array(reference("blog")).default([]),
+            projects: z.array(reference("projects")).default([]),
+        })
+        .default({ blog: [], projects: [] }),
 });
 
 const blog = defineCollection({
@@ -41,7 +43,7 @@ const tags = defineCollection({
     loader: file("./src/content/tags.json"),
     schema: z.object({
         id: z.string(),
-        iconUrl: z.string().optional(),
+        iconUrl: z.url(),
     }),
 });
 
