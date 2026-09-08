@@ -1,31 +1,29 @@
 ---
-import ProjectCard from "@components/ProjectCard.astro";
+import EntryRow from "@components/EntryRow.astro";
 import BaseLayout from "@layouts/BaseLayout.astro";
-import { getProjects } from "../content.config";
+import { getBlogPosts, getProjects } from "../content.config";
 
 const projects = await getProjects();
-
-const hasProjects = projects.length > 0;
+const blogPosts = await getBlogPosts();
 ---
 
 <BaseLayout title="Projects">
-	<div class="container hero auto-rows-min">
-		<h1 class="mt-36 mb-24 self-start h-fit">projects.</h1>
-		{
-			hasProjects && (
-				<ul class="w-full px-1 py-2 grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-10 lg:gap-10">
-					{projects
-						.sort((a, b) => a.data.pubDate.getTime() - b.data.pubDate.getTime())
-						.map(({ id, data }, i) => (
-							<ProjectCard index={i} project={{ id, ...data }} />
-						))}
-				</ul>
-			)
-		}
-		{
-			!hasProjects && (
-				<h2 class="mt-24 w-full flex flex-col space-y-6 text-white text-4xl">Check back soon...</h2>
-			)
-		}
-	</div>
+    <div class="container hero auto-rows-min">
+        <h1 class="mt-36 mb-4 self-start">projects.</h1>
+        <ul class="w-full flex flex-col divide-y-2 divide-gray-400/20">
+            {
+                projects
+                    .sort((a, b) => a.data.pubDate.getTime() - b.data.pubDate.getTime())
+                    .map(project => <EntryRow baseUrl="/projects" entry={project} />)
+            }
+        </ul>
+        <h1 class="mt-36 mb-4 self-start">blog.</h1>
+        <ul class="w-full flex flex-col divide-y-2 divide-gray-400/20">
+            {
+                blogPosts
+                    .sort((a, b) => a.data.pubDate.getTime() - b.data.pubDate.getTime())
+                    .map(post => <EntryRow baseUrl="/blog" entry={post} />)
+            }
+        </ul>
+    </div>
 </BaseLayout>
