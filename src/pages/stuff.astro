@@ -8,17 +8,17 @@ const blogPosts = await getBlogPosts();
 ---
 
 <BaseLayout title="Stuff">
-    <div class="container hero auto-rows-min">
-        <h1 class="mt-36 mb-4 self-start">projects.</h1>
-        <ul class="w-full flex flex-col divide-y-2 divide-gray-400/20">
+    <div class="container">
+        <h1 class="mt-36 mb-12 self-start">projects.</h1>
+        <ul class="flex flex-col divide-y-2 divide-gray-800">
             {
                 projects
                     .sort((a, b) => a.data.pubDate.getTime() - b.data.pubDate.getTime())
                     .map(project => <EntryRow baseUrl="/projects" entry={project} />)
             }
         </ul>
-        <h1 class="mt-36 mb-4 self-start">blog.</h1>
-        <ul class="w-full flex flex-col divide-y-2 divide-gray-400/20">
+        <h1 class="mt-20 mb-12 self-start">blog.</h1>
+        <ul class="flex flex-col divide-y-2 divide-gray-400">
             {
                 blogPosts
                     .sort((a, b) => a.data.pubDate.getTime() - b.data.pubDate.getTime())

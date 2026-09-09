@@ -35,24 +35,22 @@ const projects = projectMatches.filter((project): project is Project => project 
 ---
 
 <BaseLayout title={`Tag: ${tagId}`}>
-    <div class="container hero auto-rows-min">
-        <div class="container hero auto-rows-min">
-            <h1 class="mt-36 mb-4 self-start">projects.</h1>
-            <ul class="w-full flex flex-col divide-y-2 divide-gray-400/20">
-                {
-                    projects
-                        .sort((a, b) => a.data.pubDate.getTime() - b.data.pubDate.getTime())
-                        .map(project => <EntryRow baseUrl="/projects" entry={project} />)
-                }
-            </ul>
-            <h1 class="mt-36 mb-4 self-start">blog.</h1>
-            <ul class="w-full flex flex-col divide-y-2 divide-gray-400/20">
-                {
-                    blogPosts
-                        .sort((a, b) => a.data.pubDate.getTime() - b.data.pubDate.getTime())
-                        .map(post => <EntryRow baseUrl="/blog" entry={post} />)
-                }
-            </ul>
-        </div>
+    <div class="container">
+        <h1 class="mt-36 mb-4 self-start">projects.</h1>
+        <ul class="w-full flex flex-col divide-y-2 divide-gray-400/20">
+            {
+                projects
+                    .toSorted((a, b) => a.data.pubDate.getTime() - b.data.pubDate.getTime())
+                    .map(project => <EntryRow baseUrl="/projects" entry={project} />)
+            }
+        </ul>
+        <h1 class="mt-36 mb-4 self-start">blog.</h1>
+        <ul class="w-full flex flex-col divide-y-2 divide-gray-400/20">
+            {
+                blogPosts
+                    .sort((a, b) => a.data.pubDate.getTime() - b.data.pubDate.getTime())
+                    .map(post => <EntryRow baseUrl="/blog" entry={post} />)
+            }
+        </ul>
     </div>
 </BaseLayout>

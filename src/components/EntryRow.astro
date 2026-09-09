@@ -14,31 +14,34 @@ const tags = await getEntries(entry.data.tags);
 
 <li
     class:list={[
-        "pt-8 pb-4 text-white lg:text-gray-600 lg:hover:text-white transition-colors relative",
+        "group flex text-white lg:text-gray-600 lg:hover:text-white lg:hover:bg-gray-800/50  transition-colors relative",
     ]}
 >
-    <a href={`${baseUrl}/${encodeURIComponent(entry.id)}`}>
-        <div>
-            <h2 class="mb-2 text-xl tracking-wide">{entry.data.title}</h2>
-            <ul class="mb-4 flex">
-                {
-                    tags.map(({ data: { id, iconUrl } }) => (
-                        <li class="grid place-items-center px-1 py-0.5 text-xs">
-                            {iconUrl && (
-                                <img
-                                    src={iconUrl}
-                                    alt={`${id} logo`}
-                                    class="flex max-h-[18px]"
-                                    width={18}
-                                    height={18}
-                                />
-                            )}
-                        </li>
-                    ))
-                }
-            </ul>
-            <p class="text-sm">{entry.data.description}</p>
-            <slot />
-        </div>
+    <a class="w-full h-full px-6 py-6" href={`${baseUrl}/${encodeURIComponent(entry.id)}`}>
+        <h2 class="mb-2 text-xl md:text-2xl tracking-wide">{entry.data.title}</h2>
+        <ul class="mb-4 flex w-fit">
+            {
+                tags.map(({ data: { id, iconUrl } }) => (
+                    <li class="grid place-items-center px-1 py-0.5 text-xs">
+                        {iconUrl && (
+                            <img
+                                src={iconUrl}
+                                alt={`${id} logo`}
+                                class="flex max-h-[18px]"
+                                width={18}
+                                height={18}
+                            />
+                        )}
+                    </li>
+                ))
+            }
+        </ul>
+        <p class="text-sm text-gray-400 group-hover:text-white md:text-lg transition-colors">
+            {entry.data.description}
+        </p>
+        <span class="flex float-end">
+            {entry.data.pubDate.toLocaleDateString("en-sg")}
+        </span>
+        <slot />
     </a>
 </li>

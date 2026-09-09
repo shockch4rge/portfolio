@@ -27,15 +27,13 @@ const lastUpdated = DateTime.fromISO(frontmatter.lastUpdated)
 const { title, description, draft, pubDate, githubUrl, related, url } = project.data;
 ---
 
-<>
-    <ContentLayout title={title} headings={headings} tags={tags}>
-        <h1>{title}</h1>
-        <div class="mb-6 font-display font-medium text-gray-600">
-            Published {DateTime.fromJSDate(pubDate).toUTC(8).toLocaleString(DateTime.DATE_FULL)} : updated&nbsp
-            {lastUpdated}
-        </div>
-        <Tags data={tags} />
-        <Content />
-        {related && <RelatedProjects slot="related-projects" id={project.id} />}
-    </ContentLayout>
-</>
+<ContentLayout title={title} headings={headings} tags={tags}>
+    <h1>{title}</h1>
+    <div class="mb-6 font-display font-medium text-gray-600">
+        Published {DateTime.fromJSDate(pubDate).toUTC(8).toLocaleString(DateTime.DATE_FULL)} : updated&nbsp
+        {lastUpdated}
+    </div>
+    <Tags data={tags} />
+    <Content />
+    {related && <RelatedProjects slot="related-projects" id={project.id} />}
+</ContentLayout>
