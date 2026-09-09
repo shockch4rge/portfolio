@@ -1,160 +1,161 @@
 @import "tailwindcss";
 
 @theme {
-	--color-zinc-*: initial;
-	--color-neutral-*: initial;
-	--color-stone-*: initial;
-	--color-fuchsia-*: initial;
-	--color-rose-*: initial;
-	--color-lime-*: initial;
+    --color-zinc-*: initial;
+    --color-neutral-*: initial;
+    --color-stone-*: initial;
+    --color-fuchsia-*: initial;
+    --color-rose-*: initial;
+    --color-lime-*: initial;
 
-	--font-*: initial;
-	--font-display: "JetBrains Mono", monospace;
-	--font-body: "Satoshi Variable", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
-		"Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    --font-*: initial;
+    --font-display: "JetBrains Mono", monospace;
+    --font-body:
+        "Satoshi Variable", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
+        "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 
-	--breakpoint-2lg: 1160px;
+    --breakpoint-2lg: 1160px;
 
-	--color-primary: #ffe292;
-	--color-secondary: #0f1522;
+    --color-primary: #ffe292;
+    --color-secondary: #0f1522;
 
-	--animate-carousel: slide 10s linear infinite;
-	--animate-fade-in: fade-in 0.2s ease-in-out;
+    --animate-carousel: slide 10s linear infinite;
+    --animate-fade-in: fade-in 0.2s ease-in-out;
 
-	--ease-in-cubic: cubic-bezier(0.18, 0.89, 0.23, 1);
-	--ease-in-jerk: cubic-bezier(0.14, -0.53, 0, 1);
+    --ease-in-cubic: cubic-bezier(0.18, 0.89, 0.23, 1);
+    --ease-in-jerk: cubic-bezier(0.14, -0.53, 0, 1);
 
-	--content-article-md: 60ch;
-	--content-article-lg: 62ch;
-	--content-article-xl: 72ch;
-	--content-article-2xl: 80ch;
+    --content-article-md: 60ch;
+    --content-article-lg: 62ch;
+    --content-article-xl: 72ch;
+    --content-article-2xl: 80ch;
 
-	--content-toc-lg: 18rem;
-	--content-toc-xl: 22rem;
+    --content-toc-lg: 18rem;
+    --content-toc-xl: 22rem;
 
-	--content-container-md: var(--content-article-md);
-	--content-container-lg: calc(var(--content-article-lg) + var(--content-toc-lg));
-	--content-container-xl: calc(var(--content-article-xl) + var(--content-toc-xl));
-	--content-container-2xl: calc(var(--content-article-2xl) + var(--content-toc-xl));
+    --content-container-md: var(--content-article-md);
+    --content-container-lg: calc(var(--content-article-lg) + var(--content-toc-lg));
+    --content-container-xl: calc(var(--content-article-xl) + var(--content-toc-xl));
+    --content-container-2xl: calc(var(--content-article-2xl) + var(--content-toc-xl));
 
-	@keyframes slide {
-		from {
-			transform: translateX(-20%);
-		}
-		to {
-			transform: translateX(calc(-120% - 1.5rem));
-		}
-	}
+    @keyframes slide {
+        from {
+            transform: translateX(-20%);
+        }
+        to {
+            transform: translateX(calc(-120% - 1.5rem));
+        }
+    }
 
-	@keyframes fade-in {
-		from {
-			opacity: 0;
-		}
-		to {
-			opacity: 1;
-		}
-	}
+    @keyframes fade-in {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
 }
 
 @layer base {
-	*,
-	::after,
-	::before {
-		box-sizing: border-box;
-	}
+    *,
+    ::after,
+    ::before {
+        box-sizing: border-box;
+    }
 
-	body {
-		::selection {
-			@apply bg-white text-secondary;
-		}
+    body {
+        ::selection {
+            @apply bg-white text-secondary;
+        }
 
-		:focus-within {
-			@apply outline-white;
-		}
+        :focus-within {
+            @apply outline-white;
+        }
 
-		scrollbar-gutter: stable;
-	}
+        scrollbar-gutter: stable;
+    }
 
-	@font-face {
-		src: url("/fonts/Satoshi-Variable.ttf") format("truetype");
-		font-family: "Satoshi Variable";
-		font-style: normal;
-		font-display: swap;
-	}
+    @font-face {
+        src: url("/fonts/Satoshi-Variable.ttf") format("truetype");
+        font-family: "Satoshi Variable";
+        font-style: normal;
+        font-display: swap;
+    }
 
-	@font-face {
-		src: url("/fonts/JetBrainsMono.ttf") format("truetype");
-		font-family: "JetBrains Mono";
-		font-style: normal;
-		font-display: swap;
-	}
+    @font-face {
+        src: url("/fonts/JetBrainsMono.ttf") format("truetype");
+        font-family: "JetBrains Mono";
+        font-style: normal;
+        font-display: swap;
+    }
 
-	h1,
-	h2,
-	p,
-	label {
-		@apply font-body;
-	}
+    h1,
+    h2,
+    p,
+    label {
+        @apply font-body;
+    }
 
-	h3,
-	h4,
-	h5,
-	h6,
-	button {
-		@apply font-display;
-	}
+    h3,
+    h4,
+    h5,
+    h6,
+    button {
+        @apply font-display;
+    }
 
-	button {
-		@apply cursor-pointer disabled:cursor-not-allowed;
-	}
+    button {
+        @apply cursor-pointer disabled:cursor-not-allowed;
+    }
 
-	h1 {
-		@apply text-white text-4xl lg:text-5xl font-bold leading-14;
-	}
+    h1 {
+        @apply text-white text-4xl lg:text-5xl font-bold leading-14;
+    }
 
-	h2 {
-		@apply text-white text-3xl font-bold;
-	}
+    h2 {
+        @apply text-white text-3xl font-bold;
+    }
 
-	h3 {
-		@apply text-primary text-xl font-semibold tracking-[0.25rem];
-	}
+    h3 {
+        @apply text-primary text-xl font-semibold tracking-[0.25rem];
+    }
 
-	h4 {
-		@apply text-xl text-white;
-	}
+    h4 {
+        @apply text-xl text-white;
+    }
 
-	p {
-		@apply text-white text-lg leading-relaxed;
-	}
+    p {
+        @apply text-white text-lg leading-relaxed;
+    }
 
-	summary {
-		::-webkit-details-marker {
-			display: none;
-		}
+    summary {
+        ::-webkit-details-marker {
+            display: none;
+        }
 
-		::marker {
-			list-style: none;
-		}
-	}
+        ::marker {
+            list-style: none;
+        }
+    }
 
-	ol {
-		@apply list-decimal list-outside;
+    ol {
+        @apply list-decimal list-outside;
 
-		::marker {
-			@apply font-display text-indigo-400;
-		}
+        ::marker {
+            @apply font-display text-indigo-400;
+        }
 
-		& > li {
-			@apply text-white font-body;
-		}
-	}
+        & > li {
+            @apply text-white font-body;
+        }
+    }
 
-	code {
-		@apply font-display!;
-	}
+    code {
+        @apply font-display!;
+    }
 
-	/*
+    /*
 	The default border color has changed to `currentColor` in Tailwind CSS v4,
 	so we've added these compatibility styles to make sure everything still
 	looks the same as it did with Tailwind CSS v3.
@@ -162,57 +163,53 @@
 	If we ever want to remove these styles, we need to add an explicit border
 	color utility to any element that depends on these defaults.
 	*/
-	*,
-	::after,
-	::before,
-	::backdrop,
-	::file-selector-button {
-		border-color: var(--color-gray-200, currentColor);
-	}
+    *,
+    ::after,
+    ::before,
+    ::backdrop,
+    ::file-selector-button {
+        border-color: var(--color-gray-200, currentColor);
+    }
 }
 
 @utility container {
-	@apply min-w-full grid grid-cols-container px-8 sm:px-24 overflow-x-hidden;
+    @apply min-w-full min-h-screen -mt-20 pb-20 grid grid-cols-container px-8 sm:px-24 overflow-x-hidden;
 }
 
 @utility grid-cols-container {
-	@apply grid-cols-1 lg:grid-cols-[1fr_minmax(65ch,var(--container-4xl))_1fr] 2xl:grid-cols-[1fr_var(--container-5xl)_1fr] *:lg:col-start-2 auto-cols-min;
-}
-
-@utility hero {
-	@apply h-screen -mt-20;
+    @apply grid-cols-1 lg:grid-cols-[1fr_minmax(65ch,var(--container-4xl))_1fr] 2xl:grid-cols-[1fr_var(--container-5xl)_1fr] *:lg:col-start-2 auto-cols-min;
 }
 
 @utility frame-border {
-	@apply border-2 border-gray-600 ring-2 ring-slate-800 ring-offset-2 ring-offset-slate-900 bg-black/20 sm:rounded-md inset-shadow-sm inset-shadow-white/20;
+    @apply border-2 border-gray-600 ring-2 ring-slate-800 ring-offset-2 ring-offset-slate-900 bg-black/20 sm:rounded-md inset-shadow-sm inset-shadow-white/20;
 }
 
 @custom-variant cb {
-	.expressive-code {
-		@slot;
-	}
+    .expressive-code {
+        @slot;
+    }
 }
 
 @custom-variant cbf {
-	.expressive-code > figure.frame {
-		@slot;
-	}
+    .expressive-code > figure.frame {
+        @slot;
+    }
 }
 
 @custom-variant cbp {
-	.expressive-code > figure.frame pre {
-		@slot;
-	}
+    .expressive-code > figure.frame pre {
+        @slot;
+    }
 }
 
 @custom-variant cbh {
-	.expressive-code > figure.frame.has-title > figcaption.header {
-		@slot;
-	}
+    .expressive-code > figure.frame.has-title > figcaption.header {
+        @slot;
+    }
 }
 
 @custom-variant cbt {
-	.expressive-code > figure.frame.has-title > figcaption.header > span.title {
-		@slot;
-	}
+    .expressive-code > figure.frame.has-title > figcaption.header > span.title {
+        @slot;
+    }
 }
