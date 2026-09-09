@@ -4,75 +4,73 @@ import Logo from "@assets/logo.svg";
 ---
 
 <header
-	class:list={[
-		"h-20 grid sticky top-0 z-50",
-		"grid-cols-1 px-8 sm:px-20 md:px-0",
-		"md:grid-cols-[1fr_var(--content-container-md)_1fr] lg:grid-cols-[1fr_var(--content-container-lg)_1fr]",
-		"xl:grid-cols-[1fr_var(--content-container-xl)_1fr] 2xl:grid-cols-[1fr_var(--content-container-2xl)_1fr]",
-	]}
+    class:list={[
+        "h-20 grid sticky top-0 z-50",
+        "grid-cols-1 px-8 sm:px-20 md:px-0",
+        "md:grid-cols-[1fr_var(--content-container-md)_1fr] lg:grid-cols-[1fr_var(--content-container-lg)_1fr]",
+        "xl:grid-cols-[1fr_var(--content-container-xl)_1fr] 2xl:grid-cols-[1fr_var(--content-container-2xl)_1fr]",
+    ]}
 >
-	<nav class="peer md:col-start-2 flex justify-between items-center z-50">
-		<a href="/" aria-label="return to home page">
-			<Logo class="w-16 md:w-18 h-16 md:h-18" aria-label="logo, spells out f-a-v-i, period" />
-		</a>
-		<div>
-			<div class="hidden md:flex justify-evenly items-center space-x-4 md:space-x-8">
-				<NavLink href="/blog">blog.</NavLink>
-				<NavLink href="/projects">projects.</NavLink>
-				<NavLink href="/contact">contact.</NavLink>
-			</div>
-		</div>
-		<input
-			id="menu"
-			type="checkbox"
-			aria-label="Toggle Menu"
-			class="appearance-none m-0 px-1 md:hidden ph-bold ph-list checked:ph-x text-primary text-4xl cursor-pointer focus-visible:ring-3 rounded-md"
-		/>
-	</nav>
+    <nav class="peer md:col-start-2 flex justify-between items-center z-50">
+        <a href="/" aria-label="return to home page">
+            <Logo class="w-16 md:w-18 h-16 md:h-18" aria-label="logo, spells out f-a-v-i, period" />
+        </a>
+        <div>
+            <div class="hidden md:flex justify-evenly items-center space-x-4 md:space-x-8">
+                <NavLink href="/stuff">stuff.</NavLink>
+                <NavLink href="/contact">contact.</NavLink>
+            </div>
+        </div>
+        <input
+            id="menu"
+            type="checkbox"
+            aria-label="Toggle Menu"
+            class="appearance-none m-0 px-1 md:hidden ph-bold ph-list checked:ph-x text-primary text-4xl cursor-pointer focus-visible:ring-3 rounded-md"
+        />
+    </nav>
 
-	<nav
-		class="nav-links col-span-3 min-h-screen p-24 hidden peer-has-checked:flex flex-col space-y-4 bg-secondary fixed inset-x-0"
-	>
-		<NavLink href="/about">ABOUT ME</NavLink>
-		<NavLink href="/blog">BLOG</NavLink>
-		<NavLink href="/projects">PROJECTS</NavLink>
-		<NavLink href="/contact">CONTACT</NavLink>
-	</nav>
-	<div class="backdrop col-span-full"></div>
+    <nav
+        class="nav-links col-span-3 min-h-screen p-24 hidden peer-has-checked:flex flex-col space-y-4 bg-secondary fixed inset-x-0"
+    >
+        <NavLink href="/about">about me.</NavLink>
+        <NavLink href="/stuff">stuff.</NavLink>
+        <NavLink href="/contact">contact.</NavLink>
+    </nav>
+    <div class="backdrop col-span-full"></div>
 </header>
 
 <script>
-	document.querySelector("#menu")!.addEventListener("click", () => {
-		document.querySelector(".nav-links")!.classList.toggle("expanded");
-	});
+    document.querySelector("#menu")!.addEventListener("click", () => {
+        document.querySelector(".nav-links")!.classList.toggle("expanded");
+    });
 
-	const header = document.querySelector("header")!;
+    const header = document.querySelector("header")!;
 
-	const observer = new IntersectionObserver(
-		([e]) => e.target.classList.toggle("bg-transparent", e.intersectionRatio < 1),
-		{ threshold: [1], rootMargin: "4px 0px 0px 0px" }
-	);
+    const observer = new IntersectionObserver(
+        ([e]) => e.target.classList.toggle("bg-transparent", e.intersectionRatio < 1),
+        { threshold: [1], rootMargin: "4px 0px 0px 0px" },
+    );
 
-	observer.observe(header);
+    observer.observe(header);
 </script>
 
 <style>
-	@supports (backdrop-filter: blur(16px)) or (-webkit-backdrop-filter: blur(16px)) {
-		.backdrop {
-			position: absolute;
-			inset: 0;
-			background: linear-gradient(to bottom, var(--color-secondary) 0%, transparent 50%);
-			backdrop-filter: blur(16px);
-			mask-image: linear-gradient(to bottom, black 0% 50%, transparent 50% 100%);
-			pointer-events: none;
-		}
-	}
+    @supports (backdrop-filter: blur(16px)) or (-webkit-backdrop-filter: blur(16px)) {
+        .backdrop {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, var(--color-secondary) 0%, transparent 50%);
+            backdrop-filter: blur(16px);
+            mask-image: linear-gradient(to bottom, black 0% 50%, transparent 50% 100%);
+            pointer-events: none;
+        }
+    }
 
-	@supports (mask-image: none) {
-		.backdrop {
-			height: 200%;
-			mask-image: linear-gradient(to bottom, black 0% 50%, transparent 50% 100%);
-			pointer-events: none;
-		}
-	}
+    @supports (mask-image: none) {
+        .backdrop {
+            height: 200%;
+            mask-image: linear-gradient(to bottom, black 0% 50%, transparent 50% 100%);
+            pointer-events: none;
+        }
+    }
 </style>

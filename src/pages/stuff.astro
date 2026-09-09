@@ -1,0 +1,29 @@
+---
+import EntryRow from "@components/EntryRow.astro";
+import BaseLayout from "@layouts/BaseLayout.astro";
+import { getBlogPosts, getProjects } from "../content.config";
+
+const projects = await getProjects();
+const blogPosts = await getBlogPosts();
+---
+
+<BaseLayout title="Stuff">
+    <div class="container">
+        <h1 class="mt-36 mb-12 self-start">projects.</h1>
+        <ul class="flex flex-col divide-y-2 divide-gray-800">
+            {
+                projects
+                    .sort((a, b) => a.data.pubDate.getTime() - b.data.pubDate.getTime())
+                    .map(project => <EntryRow baseUrl="/projects" entry={project} />)
+            }
+        </ul>
+        <h1 class="mt-20 mb-12 self-start">blog.</h1>
+        <ul class="flex flex-col divide-y-2 divide-gray-400">
+            {
+                blogPosts
+                    .sort((a, b) => a.data.pubDate.getTime() - b.data.pubDate.getTime())
+                    .map(post => <EntryRow baseUrl="/blog" entry={post} />)
+            }
+        </ul>
+    </div>
+</BaseLayout>

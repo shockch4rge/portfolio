@@ -14,27 +14,26 @@ import { unified } from "@astrojs/markdown-remark";
 
 // https://astro.build/config
 export default defineConfig({
-  vite: {
-    plugins: [tailwindcss()],
-  },
-  integrations: [
-    expressiveCode(),
-    mdx(),
-    react(),
-  ],
+    vite: {
+        plugins: [tailwindcss()],
+        server: {
+            allowedHosts: ["dev.favteo.com"],
+        },
+    },
+    integrations: [expressiveCode(), mdx(), react()],
 
-  site: "https://favteo.com",
-  markdown: {
-    processor: unified({
-      remarkPlugins: [remarkToc, remarkSectionize, remarkLastUpdatedTime],
-    }),
-  },
-  image: {
-    domains: ["svgl.app"],
-    remotePatterns: [
-      {
-        protocol: "https",
-      },
-    ],
-  },
+    site: "https://favteo.com",
+    markdown: {
+        processor: unified({
+            remarkPlugins: [remarkToc, remarkSectionize, remarkLastUpdatedTime],
+        }),
+    },
+    image: {
+        domains: ["svgl.app"],
+        remotePatterns: [
+            {
+                protocol: "https",
+            },
+        ],
+    },
 });
